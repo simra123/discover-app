@@ -5,6 +5,7 @@ import {
   CardBody,
   CardHeader,
   UncontrolledTooltip,
+  Input,
 } from "reactstrap";
 import { useLocation } from "react-router-dom";
 import HttpHandler from "../http/services/CoreHttpHandler";
@@ -159,7 +160,6 @@ const UserReports = (): JSX.Element => {
         );
         const currMonth2 = stateHistory[stateHistory.length - 1]?.following;
         const lastMonth2 = stateHistory[stateHistory.length - 2]?.following;
-        console.log(currMonth2, lastMonth2, "fllowig");
         setFollowing(
           lastMonth2 !== 0
             ? (((currMonth2 - lastMonth2) / lastMonth2) * 100).toFixed(2) + "%"
@@ -285,7 +285,6 @@ const UserReports = (): JSX.Element => {
     { value: "down", label: "DOWNLOAD" },
   ];
 
-  console.log(userData, "hi");
   return (
     <>
       <TikTokList
@@ -331,16 +330,16 @@ const UserReports = (): JSX.Element => {
                 md="4"
                 className="d-flex justify-content-end align-items-end"
               >
-                <Select
-                  className="mx-2 react-select"
-                  defaultValue={options[0]}
-                  options={options}
-                />
-                <Select
-                  className=""
-                  defaultValue={options[1]}
-                  options={options}
-                />
+                <Input className="mx-2 " name="select" type="select">
+                  <option>ADD TO LIST</option>
+                  <option>NEW LIST1</option>
+                  <option>NEW LIST</option>
+                </Input>
+                <Input className="mx-2 " name="select" type="select">
+                  <option>DOWNLOAD REPORT</option>
+                  <option>DOWNLOAD JSON</option>
+                  <option>DOWNLOAD PDF</option>
+                </Input>
               </Col>
               <p className="date">
                 Updated:{" "}
@@ -351,14 +350,14 @@ const UserReports = (): JSX.Element => {
             </Row>
           </Card>
           <div className="d-flex">
-            <h2>Influencer insight</h2>
+            <h2 className="my-3">Influencer insight</h2>
           </div>
           <AvgCards
             text={FormatNumber(userData?.user_profile?.followers)}
             textM={"Followers"}
             percentage={followers}
           />
-          <h2>Post data</h2>
+          <h2 className="my-3">Post data</h2>
           <Row>
             <Col md="8">
               <Row>
@@ -389,7 +388,7 @@ const UserReports = (): JSX.Element => {
               </Row>
             </Col>
             <Col md="4">
-              <Card style={{ height: "323px" }} className="avg-cards">
+              <Card className="avg-cards" style={{ height: "267px" }}>
                 <h2 className="d-flex">
                   {(userData?.user_profile?.engagement_rate * 100).toFixed(2)}%
                 </h2>
@@ -459,7 +458,7 @@ const UserReports = (): JSX.Element => {
           <Row>
             {userData?.user_profile?.relevant_tags?.length && (
               <Col md="6">
-                <Card className="p-4 my-2">
+                <Card className="avg-cards">
                   <h5>
                     Topic tensor{" "}
                     <span id="similar">
@@ -479,7 +478,7 @@ const UserReports = (): JSX.Element => {
             )}
             {userData?.user_profile?.similar_users?.length && (
               <Col md="6">
-                <Card className="p-4 my-2 text-dark">
+                <Card className="avg-cards text-dark">
                   <h5>
                     Lookalikes (similar topics)
                     <span id="similar">
@@ -501,8 +500,8 @@ const UserReports = (): JSX.Element => {
           <Row>
             {userData?.user_profile?.stat_history[0] && (
               <Col md="4">
-                <Card className="py-4 my-2">
-                  <h5 className="mx-4">
+                <Card className="avg-cards">
+                  <h5>
                     Followers
                     <span
                       className={` ${
@@ -523,8 +522,8 @@ const UserReports = (): JSX.Element => {
 
             {userData?.user_profile?.stat_history[0] && (
               <Col md="4">
-                <Card className="py-4 my-2">
-                  <h5 className="mx-4">
+                <Card className="avg-cards">
+                  <h5>
                     Following{" "}
                     <span
                       className={` ${
@@ -544,8 +543,8 @@ const UserReports = (): JSX.Element => {
 
             {userData?.user_profile?.stat_history[0] && (
               <Col md="4">
-                <Card className="py-4 my-2">
-                  <h5 className="mx-4">
+                <Card className="avg-cards">
+                  <h5>
                     Likes{" "}
                     <span
                       className={` ${
@@ -562,8 +561,8 @@ const UserReports = (): JSX.Element => {
             )}
 
             <Col md="12">
-              <Card className="py-4 my-2">
-                <h5 className="mx-4">
+              <Card className="avg-cards">
+                <h5>
                   Engagements spread for last posts
                   <span id="engagelikers">
                     <AiFillQuestionCircle
@@ -582,10 +581,10 @@ const UserReports = (): JSX.Element => {
             </Col>
           </Row>
           <Row>
-            <h2 className="text-center my-3">Audience data (by Followers)</h2>
+            <h2 className="my-3 text-center">Audience data (by Followers)</h2>
             <Col md="4">
-              <Card>
-                <h5 className="mx-4">Gender split</h5>
+              <Card className="avg-cards">
+                <h5>Gender split</h5>
                 <GenderSplit
                   data={userData?.audience_followers?.data?.audience_genders}
                 />
@@ -593,8 +592,8 @@ const UserReports = (): JSX.Element => {
             </Col>
             {userData?.user_profile?.relevant_tags?.length && (
               <Col md="8">
-                <Card>
-                  <h5 className="mx-4">Age and gender split</h5>
+                <Card className="avg-cards">
+                  <h5>Age and gender split</h5>
                   <AgeGenderColumns
                     data={
                       userData?.audience_followers?.data
@@ -608,8 +607,8 @@ const UserReports = (): JSX.Element => {
             {userData?.audience_followers?.data?.audience_geo?.countries
               ?.length && (
               <Col md="6">
-                <Card className="py-3 my-2">
-                  <h5 className="mx-4">Location by country</h5>
+                <Card className="avg-cards">
+                  <h5>Location by country</h5>
                   <LocationByCountry
                     followers={userData?.user_profile?.followers}
                     showFlag={true}
@@ -623,8 +622,8 @@ const UserReports = (): JSX.Element => {
             )}
             {userData?.audience_followers?.data?.audience_languages?.length && (
               <Col md="6">
-                <Card className="py-3 my-2">
-                  <h5 className="mx-4">Location by language</h5>
+                <Card className="avg-cards">
+                  <h5>Location by language</h5>
                   <LocationByCountry
                     showFlag={false}
                     followers={userData?.user_profile?.followers}
@@ -637,7 +636,7 @@ const UserReports = (): JSX.Element => {
             )}
             <Col md="6">
               <Card
-                className="py-3 my-2 avg-cards  "
+                className=" avg-cards  "
                 style={{
                   display: "flex",
                   margin: "auto",
@@ -662,8 +661,8 @@ const UserReports = (): JSX.Element => {
             {userData?.audience_followers?.data?.audience_reachability
               ?.length && (
               <Col md="6">
-                <Card style={{ height: "280px" }} className="py-3 my-2">
-                  <h5 className="mx-4">Audience reachability</h5>
+                <Card className="avg-cards">
+                  <h5>Audience reachability</h5>
                   <Reachability
                     data={
                       userData?.audience_followers?.data?.audience_reachability
@@ -674,7 +673,7 @@ const UserReports = (): JSX.Element => {
             )}
             {userData?.user_profile?.similar_users?.length && (
               <Col md="6">
-                <Card className="p-4 my-2 text-dark">
+                <Card className="avg-cards text-dark">
                   <h5>Audience lookalikes</h5>
                   <SimilarUsers
                     data={
@@ -686,7 +685,7 @@ const UserReports = (): JSX.Element => {
             )}
             {userData?.user_profile?.similar_users?.length && (
               <Col md="6">
-                <Card className="p-4 my-2 text-dark">
+                <Card className="avg-cards text-dark">
                   <h5>Top followers </h5>
                   <SimilarUsers
                     data={userData?.audience_followers?.data?.notable_users}

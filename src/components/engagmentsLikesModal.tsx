@@ -17,7 +17,6 @@ interface ModalProps {
   }[];
 }
 const ModalProfile: React.FC<ModalProps> = ({ modal, setModal, data }) => {
-  console.log(data);
   return (
     <Modal
       modalClassName="modal-lg"

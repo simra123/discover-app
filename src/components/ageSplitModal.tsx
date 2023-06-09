@@ -17,7 +17,6 @@ const ModalProfile: React.FC<ModalProps> = ({
   data,
   followers,
 }) => {
-  console.log(data, followers);
   return (
     <Modal
       modalClassName="modal-md"
@@ -37,7 +36,7 @@ const ModalProfile: React.FC<ModalProps> = ({
           <tbody>
             {data?.map((val) => {
               return (
-                <tr>
+                <tr key={val?.code}>
                   <td>{val.code}</td>
                   <td>
                     {" "}

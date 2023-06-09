@@ -33,7 +33,7 @@ const SimilarUsers: React.FC<UserProps> = ({ data }) => {
       />
       {data?.slice(0, 5).map((val: MapTypes) => {
         return (
-          <Row className="my-3" key={val?.user_id}>
+          <Row className="mt-3" key={val?.username}>
             <Col xs="2" className="m-0 text-center">
               <img
                 height={48}
@@ -47,12 +47,18 @@ const SimilarUsers: React.FC<UserProps> = ({ data }) => {
                 {" "}
                 <h6 className="fw-normal m-0"> {val?.username}</h6>
               </Link>
-              <small className="text-muted "> {val?.fullname}</small>
+              <small className="text-muted  fw-light ms-0">
+                {" "}
+                {val?.fullname}
+              </small>
             </Col>
           </Row>
         );
       })}
-      <p style={{ cursor: "pointer" }} onClick={() => setShowModal(true)}>
+      <p
+        style={{ cursor: "pointer", margin: "5px 0px", padding: 0 }}
+        onClick={() => setShowModal(true)}
+      >
         view more
       </p>
     </div>

@@ -6,74 +6,53 @@ import {
   Card,
   Nav,
   NavItem,
-  NavLink,
   NavbarBrand,
-  Input,
-  InputGroup,
-  Button,
-  CardBody,
+  UncontrolledDropdown,
+  DropdownToggle,
+  DropdownMenu,
+  DropdownItem,
 } from "reactstrap";
 import { ImSearch } from "react-icons/im";
-import { Routes, Route, BrowserRouter, Outlet } from "react-router-dom";
+import { Outlet, useLocation, NavLink } from "react-router-dom";
 import { IoOptionsSharp } from "react-icons/io5";
-import HttpHandler from "../http/services/CoreHttpHandler";
+import { HiUsers } from "react-icons/hi";
 import Logo from "../assets/images/influsense.png";
 import UserDefault from "../assets/images/default-avatar.png";
 import Flag from "../assets/images/flag.png";
-import { useMutation } from "@tanstack/react-query";
-import { AxiosResponse, AxiosError } from "axios";
 
-type SearchType = {
-  type: string;
-  user_id: string;
-};
-
-type Response = {
-  success: string;
-};
-
-type Error = {
-  error: string;
-};
 const Dashboard: React.FC = () => {
-  const { mutate } = useMutation<
-    AxiosResponse<Response>,
-    AxiosError<Error>,
-    SearchType
-  >({
-    mutationFn: (data: SearchType) => {
-      return HttpHandler.makeRequest("api/profiles", "POST", data);
-    },
-  });
-
   const year: number = new Date().getFullYear();
-
+  const location = useLocation();
+  const pathnameObj = {
+    "/dashboard": "Influencer Search",
+    "/dashboard/reports": "Reports History",
+  };
   return (
     <Container fluid className="dashboard">
       <Row>
         <Col lg="1">
           <div className="sidebar ">
             <Nav vertical>
-              <NavbarBrand href="/dashboard">
+              <NavbarBrand active href="/dashboard">
                 <img src={Logo} alt="logo" height={"auto"} width={70} />
               </NavbarBrand>
               <NavItem>
-                <NavLink href="/dashboard">
+                <NavLink className="nav-link" to="/dashboard">
                   <ImSearch color="gray" size="22" />
                 </NavLink>
               </NavItem>
               <NavItem>
-                <NavLink href="#">
+                <NavLink className="nav-link" to="/">
                   <IoOptionsSharp color="gray" size="25" />
                 </NavLink>
               </NavItem>
               <NavItem>
-                <NavLink href="#">
-                  <ImSearch color="gray" size="22" />
+                <NavLink className="nav-link" to="/dashboard/reports">
+                  <HiUsers color="gray" size="22" />
                 </NavLink>
               </NavItem>
               <NavItem>
-                <NavLink href="#">
+                <NavLink className="nav-link" to="/">
                   <ImSearch color="gray" size="22" />
                 </NavLink>
               </NavItem>
@@ -82,20 +61,43 @@ const Dashboard: React.FC = () => {
         </Col>
         <Col lg="11">
           <div className="navbar">
-            <h4 className="fw-bold">Influencer Search</h4>
-            <div className="">
+            <h4 className="fw-bold">{pathnameObj[location.pathname]}</h4>
+            <div className="d-flex">
               <img
                 src={Flag}
                 height={26}
                 className="rounded-circle mx-2"
                 alt="Avatar"
               />
-              <img
-                src={UserDefault}
-                height={30}
-                className="rounded-circle"
-                alt="Avatar"
-              />
+              <UncontrolledDropdown>
+                <DropdownToggle tag="a">
+                  {" "}
+                  <img
+                    src={UserDefault}
+                    height={30}
+                    className="rounded-circle"
+                    alt="Avatar"
+                  />
+                </DropdownToggle>
+                <DropdownMenu
+                  style={{
+                    transform: "translate3d(0px, 38.6667px, 0px)",
+                    inset: "none",
+                    right: 0,
+                    top: 48,
+                  }}
+                >
+                  <DropdownItem
+                    onClick={() => {
+                      localStorage.removeItem("isUserLogged");
+                      window.location.reload();
+                    }}
+                  >
+                    Logout
+                  </DropdownItem>
+                  <DropdownItem>Account Settings</DropdownItem>
+                </DropdownMenu>
+              </UncontrolledDropdown>
             </div>
           </div>
 

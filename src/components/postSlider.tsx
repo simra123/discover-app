@@ -37,7 +37,6 @@ interface DataProps {
 }
 
 const PostSlider: React.FC<DataProps> = ({ data }) => {
-  console.log(data);
   return (
     <>
       <Swiper
@@ -74,7 +73,7 @@ const PostSlider: React.FC<DataProps> = ({ data }) => {
       >
         {data?.map((val: any) => {
           return (
-            <SwiperSlide>
+            <SwiperSlide key={val?.link}>
               <Link to={val?.link} target="_blank">
                 <div className="position-relative ">
                   <img src={val?.thumbnail} alt="thumbnail" />

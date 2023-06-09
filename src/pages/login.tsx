@@ -56,7 +56,6 @@ const LoginPage = ({ setUser }: any) => {
             "isUserLogged",
             JSON.stringify(data?.data.access_token),
           );
-          console.log(JSON.stringify(data?.data?.access_token));
           setUser(JSON.stringify(data?.data?.access_token));
           ToastSuccess("login successfully");
           setTimeout(() => {

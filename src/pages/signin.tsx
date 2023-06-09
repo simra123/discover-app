@@ -60,7 +60,6 @@ const LoginPage = () => {
       {
         onSuccess: (data) => {
           setSubmitting(false);
-          console.log(data?.data.success);
           ToastSuccess("registered successfully");
           navigate("/login");
         },

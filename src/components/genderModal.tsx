@@ -29,7 +29,7 @@ const ModalProfile: React.FC<ModalProps> = ({ modal, setModal, data }) => {
           <tbody>
             {data?.map((val) => {
               return (
-                <tr>
+                <tr key={val?.code}>
                   <td>{val.code}</td>
                   <td>{val.weight}</td>
                   <td></td>

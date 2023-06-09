@@ -6,7 +6,8 @@
     opacity: 1;
   }
 }
-
+@import url("https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap");
 .page-background {
   background-image: url("../images/login-bg.jpg");
   background-position: center;
@@ -83,6 +84,24 @@ a {
   .form-control {
     border: none;
   }
+  .form-select {
+    width: 180px !important;
+    color: white;
+    width: 200px !important;
+    border-radius: 10px;
+    line-height: 2rem;
+    background-color: $primary;
+    &:focus {
+      box-shadow: none;
+      border-color: $white;
+    }
+    option {
+      background-color: $white;
+      color: black;
+      padding: 30px;
+      margin: 40px;
+    }
+  }
   image {
     clip-path: inset(0% round 50%);
     z-index: 100;
@@ -107,6 +126,11 @@ a {
 
     .navbar-brand {
       margin-bottom: 10px;
+    }
+    .nav-link.active {
+      svg {
+        color: $primary !important;
+      }
     }
     .nav-link {
       svg {
@@ -143,9 +167,13 @@ a {
     margin-bottom: -1px;
   }
   .mid-content {
+    h2 {
+      font-weight: 500;
+      font-size: 1.8rem;
+    }
     .css-13cymwt-control,
     .css-t3ipsp-control {
-      width: 180px;
+      width: 180px !important;
       // border-color: rgba($primary, 1) !important;
       &:focused {
         border-color: rgba($primary, 1) !important;
@@ -155,12 +183,21 @@ a {
     animation: fadeIn 1s;
     background-color: #f6f9fb;
     padding: 10px;
+    .report-box {
+      flex-direction: column;
+      margin-bottom: 20px;
+      vertical-align: top;
+      font-size: 15px;
+      margin-right: 20px;
+      white-space: normal;
+    }
     .user_card {
       margin-top: 30px;
       color: white;
       background-color: rgba($primary, 1);
       padding: 20px 30px;
       text-align: left;
+      margin-bottom: 10px;
       h2 {
         font-size: 40px;
         font-weight: 700;
@@ -183,6 +220,7 @@ a {
     .date {
       display: flex;
       justify-content: end;
+      margin-top: 10px;
     }
     .other_profiles {
       text-align: left;
@@ -196,17 +234,17 @@ a {
       width: 100%;
       height: 350px;
     }
-    h2,
-    h5 {
-      text-align: left;
-      margin: 10px 0px;
-    }
+    // h2,
+    // h5 {
+    //   text-align: left;
+    //   margin: 10px 0px;
+    // }
     h5 {
       font-size: 15px;
     }
     .avg-cards {
-      margin: 15px 0px;
-      padding: 20px;
+      margin-bottom: 20px;
+      padding: 22px;
       h5 {
         text-align: left;
         font-size: 15px;

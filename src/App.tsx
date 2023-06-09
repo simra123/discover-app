@@ -3,6 +3,9 @@ import { Routes, Route, Navigate, Outlet } from "react-router-dom";
 import "bootstrap/dist/css/bootstrap.min.css";
 import "./assets/styles/styles.scss";
 import "react-toastify/dist/ReactToastify.css";
+import "@fontsource/poppins";
+import "@fontsource/poppins/400.css";
+import "@fontsource/poppins/400-italic.css";
 const LoginPage = React.lazy(() => import("./pages/login"));
 const RegisterPage = React.lazy(() => import("./pages/signin"));
 const Dashboard = React.lazy(() => import("./pages/dashboard.tsx"));
@@ -53,6 +56,7 @@ const App: React.FC = () => {
         <Route element={<ProtectedRoute user={isUserLogged} />}>
           <Route path="/dashboard/*" element={<Dashboard />}>
             <Route
+              exact={true}
               index
               element={
                 <TikTokList
@@ -62,7 +66,7 @@ const App: React.FC = () => {
                 />
               }
             />
-            <Route path="reports" element={<UserReports />} />
+            <Route exact path="reports" element={<UserReports />} />
             {/* Add more routes for your dashboard */}
           </Route>
         </Route>

@@ -10,9 +10,9 @@ import {
 import HttpHandler from "../http/services/CoreHttpHandler";
 import { useState, useCallback } from "react";
 import { FormatNumber } from "../components";
-import { Navigate } from "react-router-dom";
 import TicTok from "../assets/images/tiktik.png";
 import Insta from "../assets/images/insta.png";
+import { useNavigate } from "react-router-dom";
 import { Link } from "react-router-dom";
 import { AxiosResponse, AxiosError } from "axios";
 import { useMutation } from "@tanstack/react-query";
@@ -57,10 +57,12 @@ const TikTokList = ({
     },
   });
   const [userProfiles, setUserProfiles] = useState<[]>([]);
-
+  const [searchVal, setSearchVal] = useState<string>("");
+  const navigate = useNavigate();
   const getSearch = useCallback(
     debounce((val: any) => {
       const getInput = val.target.value;
+      setSearchVal(getInput);
       if (getInput) {
         mutate(
           {
@@ -69,7 +71,6 @@ const TikTokList = ({
           },
           {
             onSuccess: (data: any) => {
-              console.log(data.data?.data?.length);
               if (data.data?.data?.length) {
                 setShowCard(true);
               } else {
@@ -88,7 +89,6 @@ const TikTokList = ({
     }, 300),
     [],
   );
-  console.log(showCard);
   return (
     <Card className="tictok-list">
       {showCard && (
@@ -154,7 +154,14 @@ const TikTokList = ({
         </Col>
         {showButton && (
           <Col md="2">
-            <Button className="w-100" color="primary">
+            <Button
+              disabled={!searchVal}
+              onClick={() =>
+                navigate(`/dashboard/reports?username=${searchVal}`)
+              }
+              className="w-100"
+              color="primary"
+            >
               Profile Insights
             </Button>
           </Col>

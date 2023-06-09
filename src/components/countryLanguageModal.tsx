@@ -18,7 +18,6 @@ const ModalProfile: React.FC<ModalProps> = ({
   title,
   followers,
 }) => {
-  console.log(data);
   return (
     <Modal
       modalClassName="modal-lg"

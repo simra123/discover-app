@@ -22,7 +22,6 @@ const ModalProfile: React.FC<ModalProps> = ({
   data,
   title,
 }) => {
-  console.log(modal, "ikjwi");
   return (
     <Modal
       modalClassName="modal-lg"

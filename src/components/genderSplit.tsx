@@ -37,7 +37,6 @@ const DonutChart: React.FC<StepCountChartProps> = ({ data }) => {
     });
     // Add data
     chart.data = updatedData;
-    console.log(updatedData);
 
     // Create series
     const series = chart.series.push(new PieSeries());

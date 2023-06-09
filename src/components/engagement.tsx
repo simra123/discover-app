@@ -21,6 +21,7 @@ const Engagements: React.FC<DataTypes> = ({ data, picture }) => {
 
     x.data = data;
     x.x = am4core.percent(-15);
+    x.y = am4core.percent(-20);
 
     let categoryAxis = x.xAxes.push(new am4charts.CategoryAxis());
     categoryAxis.dataFields.category = "total";
@@ -121,8 +122,11 @@ const Engagements: React.FC<DataTypes> = ({ data, picture }) => {
     <>
       {" "}
       <EngagementsModal modal={showModal} setModal={setShowModal} data={data} />
-      <div id="chartdiv" style={{ width: "300px", height: "200px" }}></div>{" "}
-      <p style={{ cursor: "pointer" }} onClick={() => setShowModal(true)}>
+      <div id="chartdiv" style={{ width: "100%", height: "auto" }}></div>{" "}
+      <p
+        style={{ cursor: "pointer", marginTop: "-25px", zIndex: 100 }}
+        onClick={() => setShowModal(true)}
+      >
         view more
       </p>
     </>

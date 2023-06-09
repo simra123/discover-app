@@ -55,7 +55,7 @@ $grid-breakpoints: (
   md: 768px,
   lg: 992px,
   xl: 1200px,
-  xxl: 1440px // Custom xxl size,,,,,,
+  xxl: 1440px // Custom xxl size,,,,,,,
 ) !default;
 
 $container-max-widths: (
@@ -64,7 +64,7 @@ $container-max-widths: (
   md: 768px,
   lg: 992px,
   xl: 1200px,
-  xxl: 1440px // Custom xxl size,,,,,,
+  xxl: 1440px // Custom xxl size,,,,,,,
 ) !default;
 // scss-docs-end container-max-widths
 
@@ -136,7 +136,7 @@ $border-radius-lg: 0.6rem !default;
 $border-radius-sm: 0.25rem !default;
 
 // shadow
-$box-shadow: 0 4px 24px 0 rgba($black, 0.1) !default;
+$box-shadow: 0 2px 20px #426eb814;
 
 $component-active-color: $white !default;
 $component-active-bg: $primary !default;

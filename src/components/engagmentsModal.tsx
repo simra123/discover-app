@@ -7,7 +7,6 @@ interface ModalProps {
   data: { total: number; min: number; max: number }[];
 }
 const ModalProfile: React.FC<ModalProps> = ({ modal, setModal, data }) => {
-  console.log(data);
   return (
     <Modal
       modalClassName="modal-md"
