@@ -12,7 +12,7 @@ interface DataProps {
 const Example: React.FC<DataProps> = ({ data, showFlag, followers }) => {
   const [showModal, setShowModal] = useState<boolean>(false);
   return (
-    <div className="mx-3">
+    <div>
       <CountryLanguegeModal
         modal={showModal}
         setModal={setShowModal}

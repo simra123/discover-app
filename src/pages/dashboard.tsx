@@ -34,26 +34,26 @@ const Dashboard: React.FC = () => {
           <div className="sidebar ">
             <Nav vertical>
               <NavbarBrand active href="/dashboard">
-                <img src={Logo} alt="logo" height={"auto"} width={70} />
+                <img src={Logo} alt="logo" height={"auto"} width={90} />
               </NavbarBrand>
               <NavItem>
                 <NavLink className="nav-link" to="/dashboard">
-                  <ImSearch color="gray" size="22" />
+                  <ImSearch color="#d0d6dd" size="26" />
                 </NavLink>
               </NavItem>
               <NavItem>
                 <NavLink className="nav-link" to="/">
-                  <IoOptionsSharp color="gray" size="25" />
+                  <IoOptionsSharp color="#d0d6dd" size="27" />
                 </NavLink>
               </NavItem>
               <NavItem>
                 <NavLink className="nav-link" to="/dashboard/reports">
-                  <HiUsers color="gray" size="22" />
+                  <HiUsers color="#d0d6dd" size="26" />
                 </NavLink>
               </NavItem>
               <NavItem>
                 <NavLink className="nav-link" to="/">
-                  <ImSearch color="gray" size="22" />
+                  <ImSearch color="#d0d6dd" size="26" />
                 </NavLink>
               </NavItem>
             </Nav>
