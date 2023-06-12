@@ -9,8 +9,8 @@ import "@fontsource/poppins/400-italic.css";
 const LoginPage = React.lazy(() => import("./pages/login"));
 const RegisterPage = React.lazy(() => import("./pages/signin"));
 const Dashboard = React.lazy(() => import("./pages/dashboard.tsx"));
-import TikTokList from "./components/tiktokList";
-import UserReports from "./components/userReports";
+import TikTokList from "./pages/searchList.tsx";
+import UserReports from "./pages/analytics.tsx";
 interface ProtectedRouteProps {
   user: string | null;
   redirectPath?: string;

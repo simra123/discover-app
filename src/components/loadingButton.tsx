@@ -9,6 +9,7 @@ interface buttonProps {
   color?: string;
   style?: React.CSSProperties;
   className?: string;
+  disabled?: boolean;
 }
 const LoadingButton = ({
   loading,
@@ -17,6 +18,7 @@ const LoadingButton = ({
   color,
   style,
   className,
+  disabled,
 }: buttonProps) => {
   return (
     <>
@@ -27,7 +29,7 @@ const LoadingButton = ({
         onClick={onClick}
         className={className ? className : "w-100"}
         color={color ? color : "primary"}
-        disabled={loading}
+        disabled={disabled || loading}
       >
         {loading ? <Spinner size="sm" color={"light"} /> : text ? text : "Send"}
       </Button>

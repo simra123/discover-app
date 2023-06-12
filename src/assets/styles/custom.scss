@@ -64,7 +64,14 @@ a {
   border-color: $primary !important;
   background-color: $primary !important;
   color: $white !important;
-
+  border-radius: 0.775rem;
+  transition: color 0.15s ease-in-out, background-color 0.15s ease-in-out,
+    border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
+  line-height: 1.5;
+  padding: calc(0.7rem + 1px) calc(1rem + 1px);
+  font-size: 0.9rem;
+  font-weight: 500;
+  text-transform: capitalize;
   &:focus,
   &:active,
   &.active {
@@ -74,6 +81,33 @@ a {
 
   &:hover:not(.disabled):not(:disabled) {
     box-shadow: 0 8px 25px -8px rgba($primary, 1);
+  }
+
+  &:not(:disabled):not(.disabled):active:focus {
+    box-shadow: none;
+  }
+}
+.btn-light {
+  border-color: $primary !important;
+  background-color: $white !important;
+  color: rgba($primary, 1) !important;
+  border-radius: 0.775rem;
+  transition: color 0.15s ease-in-out, background-color 0.15s ease-in-out,
+    border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
+  line-height: 1.5;
+  padding: calc(0.7rem + 1px) calc(1rem + 1px);
+  font-size: 0.9rem;
+  font-weight: 500;
+  text-transform: capitalize;
+  &:focus,
+  &:active,
+  &.active {
+    color: $white;
+    background-color: rgba($primary, 1);
+  }
+
+  &:hover:not(.disabled):not(:disabled) {
+    box-shadow: 0 8px 5px -8px rgba($primary, 1);
   }
 
   &:not(:disabled):not(.disabled):active:focus {
@@ -100,6 +134,23 @@ a {
       color: black;
       padding: 30px;
       margin: 40px;
+    }
+  }
+  .dashboard_table {
+    margin: 30px 0px;
+    th {
+      font-size: 13px;
+      font-weight: 500;
+      padding-bottom: 20px;
+    }
+    td {
+      font-size: 14px;
+      align-items: center;
+      margin: auto;
+      padding: 10px;
+      a {
+        font-size: 13px;
+      }
     }
   }
   image {

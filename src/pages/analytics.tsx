@@ -10,10 +10,9 @@ import {
 import { useLocation } from "react-router-dom";
 import HttpHandler from "../http/services/CoreHttpHandler";
 import { useState, useEffect, memo } from "react";
-import Select from "react-select";
 import { AxiosResponse, AxiosError } from "axios";
 import { useMutation } from "@tanstack/react-query";
-import TikTokList from "./tiktokList";
+import TikTokList from "./searchList";
 import * as am4core from "@amcharts/amcharts4/core";
 import * as am4charts from "@amcharts/amcharts4/charts";
 
@@ -22,15 +21,15 @@ import moment from "moment";
 import { AiFillQuestionCircle } from "react-icons/ai";
 import am4themes_animated from "@amcharts/amcharts4/themes/animated";
 import { AuthFunction } from "../components";
-import StepCountChart from "./engagmentsLikes";
-import GenderSplit from "./genderSplit";
-import WordCloud from "./wordChart";
-import AgeGenderColumns from "./ageGenderSplit";
-import LocationByCountry from "./locationByCountry";
-import Reachability from "./reachability";
+import StepCountChart from "../components/engagmentsLikes";
+import GenderSplit from "../components/genderSplit";
+import WordCloud from "../components/wordChart";
+import AgeGenderColumns from "../components/ageGenderSplit";
+import LocationByCountry from "../components/locationByCountry";
+import Reachability from "../components/reachability";
 import { FlagIcon } from "react-flag-kit";
-import SimilarUsers from "./similiarUser";
-import PostSlider from "./postSlider";
+import SimilarUsers from "../components/similiarUser";
+import PostSlider from "../components/postSlider";
 /* Chart code */
 // Themes begin
 am4core.useTheme(am4themes_animated);
