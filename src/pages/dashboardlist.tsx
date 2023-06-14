@@ -1,5 +1,5 @@
-import React, { useEffect, useState } from "react";
-import { Table, Button } from "reactstrap";
+import React, { useEffect, useState, useContext } from "react";
+import { Table, Button, Input, FormGroup, Label } from "reactstrap";
 import { FormatNumber, AuthFunction, LoadingButton } from "../components";
 import { useMutation } from "@tanstack/react-query";
 import { AxiosResponse, AxiosError } from "axios";
@@ -7,90 +7,44 @@ import HttpHandler from "../http/services/CoreHttpHandler";
 import { Link } from "react-router-dom";
 import { AiOutlineLineChart } from "react-icons/ai";
 import { SlArrowDown } from "react-icons/sl";
-
-interface ModalProps {
-  modal: boolean;
-  setModal: (value: boolean) => void;
-  data: { id: number; weight: number; code: string; name: string }[];
-  showFlag: boolean;
-  title: string;
-  followers: number;
+import { DefaultChannel } from "../contextHook";
+import { useNavigate } from "react-router-dom";
+interface DashboardProps {
+  totalUsers: number;
+  listData: any[];
+  totalPages: number;
+  currentPage: number;
+  sortBy: string;
+  handlePageNumber?: (value: void) => void;
+  isLoading?: boolean;
+  recordsPerPage?: number;
 }
 
-type listBody = {
-  page: number;
-  type: string;
-  sortby: string;
-};
-interface listDataType {
-  type: string;
-  page: 2;
-  sortby: string;
-  filters: [];
-}
-const DashBoard: React.FC<ModalProps> = ({}) => {
-  const [listData, setListData] = useState([]);
-  const [totalPages, setTotaPages] = useState(0);
-  const [totalUsers, setTotalUsers] = useState(0);
-  const [currentPage, setCurrentPage] = useState(2);
-  const { mutate, isLoading } = useMutation<
-    AxiosResponse<Response>,
-    AxiosError<Error>,
-    listBody
-  >(
-    {
-      mutationFn: (data: listBody) => {
-        return HttpHandler.makeRequest("api/profiles_listing", "POST", data);
-      },
-    },
-    {
-      refetchOnWindowFocus: false,
-    },
-  );
-  useEffect(() => {
-    mutate(
-      {
-        type: "tiktok",
-        page: 1,
-        sortby: "followers",
-      },
-      {
-        onSuccess: (data: any) => {
-          console.log(data.data);
-          setListData(data.data.data);
-          setTotaPages(data.data?.totalPages);
-          setTotalUsers(data.data?.totalRecords);
-        },
-        onError: (data: any) => {
-          AuthFunction(data);
-        },
-      },
-    );
-  }, []);
-  const handlePageNumber = () => {
-    setCurrentPage(currentPage + 1);
-    console.log(currentPage);
-    mutate(
-      {
-        type: "tiktok",
-        page: currentPage,
-        sortby: "followers",
-      },
-      {
-        onSuccess: (data: any) => {
-          const res: any[] = data.data?.data;
-          // console.log(...res);
-          setListData([...listData, ...res]);
-        },
-        onError: (data: any) => {
-          AuthFunction(data);
-        },
-      },
-    );
-  };
+const DashBoard: React.FC<DashboardProps> = ({
+  totalUsers,
+  listData,
+  totalPages,
+  currentPage,
+  sortBy,
+  handlePageNumber,
+  isLoading,
+  recordPerPage,
+}) => {
+  const [channel] = useContext(DefaultChannel);
+
+  const navigate = useNavigate();
+
   return (
     <div className="dashboard_table">
-      <Table>
+      <FormGroup className="d-flex">
+        <Label className="my-2 mx-2">sort by</Label>
+        <Input className=" w-auto " name="select" type="select">
+          <option>Followers</option>
+          <option>Engagemnets</option>
+        </Input>
+      </FormGroup>
+
+      <Table responsive>
         <thead>
           <tr>
             <th>{totalUsers} INFLUENCERS FOUND</th>
@@ -134,7 +88,14 @@ const DashBoard: React.FC<ModalProps> = ({}) => {
                   {FormatNumber(val?.user_profile.engagements)}
                 </td>
                 <td className="pt-3 text-end">
-                  <Button color="primary">
+                  <Button
+                    color="primary"
+                    onClick={() => {
+                      navigate(
+                        `reports?username=${val?.user_profile.username}`,
+                      );
+                    }}
+                  >
                     {" "}
                     <AiOutlineLineChart size={22} /> PROFILE INSIGHT
                   </Button>
@@ -152,7 +113,7 @@ const DashBoard: React.FC<ModalProps> = ({}) => {
         color="primary"
         disabled={totalPages < currentPage}
         className="m-auto d-block"
-        text="Unlock next 10 results"
+        text={`Unlock next ${recordPerPage} results`}
         loading={isLoading}
       />
     </div>

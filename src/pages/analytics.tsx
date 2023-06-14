@@ -30,6 +30,7 @@ import Reachability from "../components/reachability";
 import { FlagIcon } from "react-flag-kit";
 import SimilarUsers from "../components/similiarUser";
 import PostSlider from "../components/postSlider";
+import SearchUsers from "../components/searchUsers";
 /* Chart code */
 // Themes begin
 am4core.useTheme(am4themes_animated);
@@ -286,7 +287,7 @@ const UserReports = (): JSX.Element => {
 
   return (
     <>
-      <TikTokList
+      <SearchUsers
         showCard={showCard}
         setShowCard={setShowCard}
         showButton={true}

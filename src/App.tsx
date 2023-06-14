@@ -1,5 +1,6 @@
 import React, { Suspense, useState } from "react";
 import { Routes, Route, Navigate, Outlet } from "react-router-dom";
+import { DefaultChannel } from "./contextHook/index.ts";
 import "bootstrap/dist/css/bootstrap.min.css";
 import "./assets/styles/styles.scss";
 import "react-toastify/dist/ReactToastify.css";
@@ -37,42 +38,42 @@ const PublicRoute = ({ user, children }: ProtectedRouteProps): JSX.Element => {
   return <>{children ? children : <Outlet />}</>;
 };
 
+interface contextTypes {
+  label: string;
+  value: string;
+  icon?: JSX.Element;
+}
 const App: React.FC = () => {
   const isLoggedIn = localStorage.getItem("isUserLogged");
   const [isUserLogged, setIsUserLogged] = useState<string | null>(isLoggedIn);
-  const [showCard, setShowCard] = useState<boolean>(false);
+  const [channel, SetChannel] = useState<contextTypes>({
+    value: "tiktok",
+    label: "Tiktok",
+  });
 
   return (
-    <Suspense fallback={<div>Loading...</div>}>
-      <Routes>
-        <Route index element={<Navigate to="/login" replace />} />
-        <Route element={<PublicRoute user={isUserLogged} />}>
-          <Route
-            path="login"
-            element={<LoginPage setUser={setIsUserLogged} />}
-          />
-          <Route path="register" element={<RegisterPage />} />
-        </Route>
-        <Route element={<ProtectedRoute user={isUserLogged} />}>
-          <Route path="/dashboard/*" element={<Dashboard />}>
+    <DefaultChannel.Provider value={[channel, SetChannel]}>
+      <Suspense fallback={<div>Loading...</div>}>
+        <Routes>
+          <Route index element={<Navigate to="/login" replace />} />
+          <Route element={<PublicRoute user={isUserLogged} />}>
             <Route
-              exact={true}
-              index
-              element={
-                <TikTokList
-                  showCard={showCard}
-                  setShowCard={setShowCard}
-                  showButton={false}
-                />
-              }
+              path="login"
+              element={<LoginPage setUser={setIsUserLogged} />}
             />
-            <Route exact path="reports" element={<UserReports />} />
-            {/* Add more routes for your dashboard */}
+            <Route path="register" element={<RegisterPage />} />
           </Route>
-        </Route>
-        <Route path="*" element={<p>There's nothing here: 404!</p>} />
-      </Routes>
-    </Suspense>
+          <Route element={<ProtectedRoute user={isUserLogged} />}>
+            <Route path="/dashboard/*" element={<Dashboard />}>
+              <Route exact={true} index element={<TikTokList />} />
+              <Route exact path="reports" element={<UserReports />} />
+              {/* Add more routes for your dashboard */}
+            </Route>
+          </Route>
+          <Route path="*" element={<p>There's nothing here: 404!</p>} />
+        </Routes>
+      </Suspense>
+    </DefaultChannel.Provider>
   );
 };
 
