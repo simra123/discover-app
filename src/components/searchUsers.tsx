@@ -42,11 +42,13 @@ type listProps = {
   showButton?: boolean;
   showCard?: boolean;
   setShowCard: (value: boolean) => void;
+  dispatch: any;
 };
 const SearchUsers = ({
   showButton,
   showCard,
   setShowCard,
+  dispatch,
 }: listProps): JSX.Element => {
   const navigate = useNavigate();
 
@@ -102,7 +104,7 @@ const SearchUsers = ({
             return (
               <CardBody key={`${index}-users`}>
                 <Link
-                  to={`/dashboard/reports?username=${val?.user_profile?.user_id}`}
+                  to={`/dashboard/reports?username=${val?.user_profile?.username}`}
                 >
                   <Row>
                     <Col xs="2" className="m-0">
@@ -116,7 +118,7 @@ const SearchUsers = ({
                     <Col xs="7" className="name">
                       <h6 className="fw-normal">
                         {" "}
-                        @{val?.user_profile?.user_id}
+                        @{val?.user_profile?.username}
                       </h6>
                       <small className="text-muted ">
                         {" "}
@@ -142,7 +144,13 @@ const SearchUsers = ({
           <Select
             defaultValue={channel}
             options={options}
-            onChange={(e) => SetChannel(e)}
+            onChange={(e) => {
+              SetChannel(e);
+              dispatch({
+                type: "channel_type",
+                payload: e.value,
+              });
+            }}
             components={{ Option: IconOption }}
           />
         </Col>

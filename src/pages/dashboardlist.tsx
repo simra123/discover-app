@@ -14,10 +14,11 @@ interface DashboardProps {
   listData: any[];
   totalPages: number;
   currentPage: number;
-  sortBy: string;
+  sortBy?: string;
   handlePageNumber?: (value: void) => void;
   isLoading?: boolean;
-  recordsPerPage?: number;
+  recordPerPage?: number;
+  dispatch: any;
 }
 
 const DashBoard: React.FC<DashboardProps> = ({
@@ -29,6 +30,7 @@ const DashBoard: React.FC<DashboardProps> = ({
   handlePageNumber,
   isLoading,
   recordPerPage,
+  dispatch,
 }) => {
   const [channel] = useContext(DefaultChannel);
 
@@ -38,9 +40,19 @@ const DashBoard: React.FC<DashboardProps> = ({
     <div className="dashboard_table">
       <FormGroup className="d-flex">
         <Label className="my-2 mx-2">sort by</Label>
-        <Input className=" w-auto " name="select" type="select">
-          <option>Followers</option>
-          <option>Engagemnets</option>
+        <Input
+          onChange={(e) =>
+            dispatch({
+              type: "sortby",
+              payload: e.target.value,
+            })
+          }
+          className=" w-auto"
+          name="select"
+          type="select"
+        >
+          <option value={"followers"}>Followers</option>
+          <option value={"engagements"}>Engagemnets</option>
         </Input>
       </FormGroup>
 

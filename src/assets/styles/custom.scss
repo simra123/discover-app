@@ -57,6 +57,9 @@ a {
     color: rgba($primary, 89);
   }
 }
+.cursor-pointer {
+  cursor: pointer;
+}
 .bg-primary {
   background-color: $primary !important;
 }
@@ -203,6 +206,18 @@ a {
     margin-bottom: -1px;
   }
   .mid-content {
+    .selected-filers {
+      list-style: none;
+      padding: 0;
+      .single-filter {
+        background-color: white;
+        padding: 8px;
+        margin: 5px;
+        display: inline-block;
+        font-size: 13px;
+        cursor: pointer;
+      }
+    }
     h2 {
       font-weight: 500;
       font-size: 1.8rem;
@@ -238,6 +253,40 @@ a {
         &:hover:not(.disabled):not(:disabled) {
           background-color: rgba($primary, 1) !important;
           color: $white !important;
+        }
+      }
+      .user-cards {
+        top: auto !important;
+        margin-top: 90px;
+        font-size: 12px;
+        width: 300px !important;
+        border-radius: 5;
+        img {
+          width: 40px;
+          height: 40px;
+        }
+        .name {
+          h6 {
+            font-size: 12px !important;
+          }
+        }
+      }
+      .hashtags-card {
+        height: 170px;
+        margin-top: 91px;
+        position: absolute;
+        margin-left: 4rem;
+
+        overflow-y: scroll;
+        padding: 10px;
+        border-radius: 0;
+        small {
+          padding: 8px;
+          cursor: pointer;
+          &:hover {
+            background-color: #07070770;
+            color: white;
+          }
         }
       }
     }
@@ -356,8 +405,8 @@ a {
         }
         .form-check {
           .form-check-input:not(:disabled):checked {
-            background-color: $primary;
-            border-color: $primary;
+            background-color: $primary !important;
+            border-color: $primary !important;
           }
           label {
             font-size: 13px;

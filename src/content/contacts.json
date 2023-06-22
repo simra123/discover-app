@@ -1,0 +1,87 @@
+[
+  {
+    "name": "Has Phone",
+    "type": "phone",
+    "action": "should"
+  },
+  {
+    "name": "Has Email",
+    "type": "email",
+    "action": "should"
+  },
+  {
+    "name": "Has Twitter",
+    "type": "twitter",
+    "action": "should"
+  },
+  {
+    "name": "Has Linkedin",
+    "type": "linkedin",
+    "action": "should"
+  },
+  {
+    "name": "Has Snapchat",
+    "type": "snapchat",
+    "action": "should"
+  },
+  {
+    "name": "Has Whatsapp",
+    "type": "whatsapp",
+    "action": "should"
+  },
+  {
+    "name": "Has Telegram",
+    "type": "telegram",
+    "action": "should"
+  },
+  {
+    "name": "Has Vk",
+    "type": "vk",
+    "action": "should"
+  },
+  {
+    "name": "Has BBM",
+    "type": "bbm",
+    "action": "should"
+  },
+  {
+    "name": "Has WeChat",
+    "type": "wechat",
+    "action": "should"
+  },
+  {
+    "name": "Has Skype",
+    "type": "skype",
+    "action": "should"
+  },
+  {
+    "name": "Has Pinterest",
+    "type": "pinterest",
+    "action": "should"
+  },
+  {
+    "name": "Has Apple Music Account",
+    "type": "itunes",
+    "action": "should"
+  },
+  {
+    "name": "Has Twitch",
+    "type": "twitch",
+    "action": "should"
+  },
+  {
+    "name": "Has Kakaoo",
+    "type": "kakao",
+    "action": "should"
+  },
+  {
+    "name": "Has Kik",
+    "type": "kik",
+    "action": "should"
+  },
+  {
+    "name": "Has Viber",
+    "type": "viber",
+    "action": "should"
+  }
+]
