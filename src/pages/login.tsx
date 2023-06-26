@@ -2,7 +2,7 @@ import { Container, Card, FormGroup, Label, Input, CardBody } from "reactstrap";
 import { Link, useNavigate } from "react-router-dom";
 import Logo from "../assets/images/logo.webp";
 import { useMutation } from "@tanstack/react-query";
-import HttpHandler from "../http/services/CoreHttpHandler";
+import HttpHandler from "../http/CoreHttpHandler";
 import { LoadingButton, ToastError, ToastSuccess } from "../components";
 import { Formik, Field, ErrorMessage, Form } from "formik";
 import * as Yup from "yup";

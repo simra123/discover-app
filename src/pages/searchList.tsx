@@ -10,7 +10,7 @@ import {
   Label,
   Badge,
 } from "reactstrap";
-import HttpHandler from "../http/services/CoreHttpHandler";
+import HttpHandler from "../http/CoreHttpHandler";
 import React, {
   useState,
   useEffect,
@@ -22,7 +22,7 @@ import React, {
 import { FormatNumber } from "../components";
 import { useNavigate } from "react-router-dom";
 import { Link } from "react-router-dom";
-import { AxiosResponse, AxiosError } from "axios";
+import axios, { AxiosResponse, AxiosError } from "axios";
 import { useMutation } from "@tanstack/react-query";
 import Select from "react-select";
 import { SlArrowDown } from "react-icons/sl";
@@ -193,37 +193,37 @@ const TikTokList = (): JSX.Element => {
   ];
   const growthMonths = [
     {
-      interval: "i1months",
+      interval: 30,
       operator: "gte",
       value: "0.05",
       name: "1 months",
     },
     {
-      interval: "i2months",
+      interval: 30 * 2,
       operator: "gte",
       value: "0.05",
       name: "2 months",
     },
     {
-      interval: "i3months",
+      interval: 30 * 3,
       operator: "gte",
       value: "0.05",
       name: "3 months",
     },
     {
-      interval: "i4months",
+      interval: 3 * 4,
       operator: "gte",
       value: "0.05",
       name: "4 months",
     },
     {
-      interval: "i5months",
+      interval: 30 * 5,
       operator: "gte",
       value: "0.05",
       name: "5 months",
     },
     {
-      interval: "i6months",
+      interval: 30 * 6,
       operator: "gte",
       value: "0.05",
       name: "6 months",
@@ -616,6 +616,7 @@ const TikTokList = (): JSX.Element => {
 
     throw Error("Unknown action: " + action.type);
   }, []);
+
   const [payloadState, dispatch] = useReducer(reducer, initialPayload);
   const cardRefs = useRef(
     Array(15)
@@ -628,8 +629,13 @@ const TikTokList = (): JSX.Element => {
     PayloadTypes
   >(
     {
-      mutationFn: (data: PayloadTypes) => {
-        return HttpHandler.makeRequest("api/profiles_listing", "POST", data);
+      mutationFn: ({ data, cancel }) => {
+        return HttpHandler.makeRequest(
+          "api/profiles_listing",
+          "POST",
+          data,
+          cancel,
+        );
       },
     },
     {
@@ -656,6 +662,7 @@ const TikTokList = (): JSX.Element => {
       q: string;
       limit: number;
       key: string;
+      cancel: any;
     }
   >({
     mutationFn: (data: {
@@ -663,8 +670,14 @@ const TikTokList = (): JSX.Element => {
       q: string;
       limit: number;
       key: string;
+      cancel: any;
     }) => {
-      return HttpHandler.makeRequest("api/search-audience", "POST", data);
+      return HttpHandler.makeRequest(
+        "api/search-audience",
+        "POST",
+        data,
+        data.cancel,
+      );
     },
   });
   const getSearchedTags = useCallback(
@@ -696,7 +709,13 @@ const TikTokList = (): JSX.Element => {
   const getSearchProfiles = useCallback(
     debounce((val: any, key: string) => {
       const getInput: string = val.target.value;
+      const CancelToken = axios.CancelToken;
+      let source = CancelToken.source();
 
+      source && source.cancel("Operation canceled due to new request.");
+
+      // save the new request for cancellation
+      source = axios.CancelToken.source();
       if (getInput) {
         profiles.mutate(
           {
@@ -704,6 +723,7 @@ const TikTokList = (): JSX.Element => {
             q: getInput,
             key: key,
             limit: 3,
+            cancel: source.token,
           },
           {
             onSuccess: (data: any) => {
@@ -715,32 +735,50 @@ const TikTokList = (): JSX.Element => {
           },
         );
       }
-    }, 300),
+    }, 100),
     [],
   );
 
   //fetch mutate function
   const getData = useCallback(() => {
-    mutate(payloadState, {
-      onSuccess: (data: any) => {
-        const res = data?.data?.data;
-        if (isPagination) {
-          setListData([...listData, ...res]);
-        } else {
-          setListData(res);
-        }
-        setIsPagination(false);
+    const CancelToken = axios.CancelToken;
+    let source = CancelToken.source();
 
-        setTotaPages(data.data?.totalPages);
-        setTotalUsers(data.data?.totalRecords);
-        setRecordsPerP(data.data?.recordsPerPage);
+    source && source.cancel("Operation canceled due to new request.");
+
+    // save the new request for cancellation
+    source = axios.CancelToken.source();
+
+    mutate(
+      { data: payloadState, cancel: source.token },
+      {
+        onSuccess: (data: any) => {
+          console.log("wait im fetching data!");
+          const res = data?.data?.data;
+          console.log(res);
+          if (isPagination) {
+            setListData([...listData, ...res]);
+          } else {
+            setListData(res);
+          }
+          setIsPagination(false);
+          setTotaPages(data.data?.totalPages);
+          setTotalUsers(data.data?.totalRecords);
+          setRecordsPerP(data.data?.recordsPerPage);
+        },
+        onError: (data: any) => {
+          AuthFunction(data);
+
+          if (axios.isCancel(data)) {
+            console.log("test cancellation", axios.isCancel(data));
+          }
+        },
       },
-      onError: (data: any) => {
-        AuthFunction(data);
-      },
-    });
+    );
   }, [payloadState]);
   useEffect(() => {
+    // const cancelToken = axios.CancelToken.source();
+
     getData();
   }, [payloadState]);
   useEffect(() => {
@@ -778,7 +816,7 @@ const TikTokList = (): JSX.Element => {
       payload: currentPage,
     });
   };
-  console.log(audienceG);
+  console.log(selectedAudAges, "aud");
 
   return (
     <>
@@ -1727,15 +1765,12 @@ const TikTokList = (): JSX.Element => {
                             <small
                               onClick={(e) => {
                                 setRelevanceString({
-                                  value: [
-                                    ...relevanceString.value,
-                                    `#${e.target.innerText}`,
-                                  ],
+                                  value: [...relevanceString.value, `#${val}`],
                                 });
                                 const k = [
                                   ...selectedContentUsers,
                                   ...relevanceString.value,
-                                  `#${e.target.innerText}`,
+                                  `#${val}`,
                                 ]
                                   .toString()
                                   .replace(/,/g, " ");
@@ -1994,6 +2029,7 @@ const TikTokList = (): JSX.Element => {
                                 ...item,
                                 weight: e.target.value,
                               }));
+                              setSelectedAudAges(k);
                               dispatch({
                                 type: "audience_age",
                                 payload: k,
@@ -2137,9 +2173,10 @@ const TikTokList = (): JSX.Element => {
                           const k = growthMonths.filter(
                             (c) => c.interval == e.target.value,
                           );
+                          setSelectedGrowth(k[0]);
                           dispatch({
-                            type: "audience_geo",
-                            payload: [...selectedGrowth, e],
+                            type: "followers_growth",
+                            payload: k[0],
                           });
                         }}
                         className="w-100"
@@ -2150,7 +2187,7 @@ const TikTokList = (): JSX.Element => {
                           return <option value={v.interval}>{v.name}</option>;
                         })}
                       </Input>
-                      {selectedGrowth?.interval && (
+                      {/* {selectedGrowth?.interval && (
                         <Input
                           type="select"
                           className="w-100 mt-2"
@@ -2160,19 +2197,8 @@ const TikTokList = (): JSX.Element => {
                               ...selectedGrowth,
                               value: e.target.value,
                             });
-                            // dispatch({
-                            //   type: "audience_geo",
-                            //   payload: [
-
-                            //     {
-                            //       ...val,
-                            //       weight: Number(e.target.value),
-                            //     },
-                            //   ],
-                            // });
-                          }}
+                          
                         >
-                          {/* <option> {">" + val.weight * 100}%</option> */}
                           {weight.slice(0, 5).map((v) => {
                             return (
                               <option value={v}>
@@ -2181,8 +2207,7 @@ const TikTokList = (): JSX.Element => {
                               </option>
                             );
                           })}
-                        </Input>
-                      )}
+                        </Input> */}
                     </CardBody>
                   </Card>
                 )}
@@ -2511,7 +2536,196 @@ const TikTokList = (): JSX.Element => {
               );
             })
           : null}
+        {relevanceString?.value?.length
+          ? relevanceString.value?.map((val) => {
+              return (
+                <li className="single-filter ">
+                  <b> #</b> {val.split("#")[1]}
+                  <GrFormClose
+                    onClick={() => {
+                      const k = relevanceString.value.filter((c) => val !== c);
+                      setRelevanceString({
+                        value: [...k],
+                      });
+                      const rString = [...k].toString().replace(/,/g, " ");
+
+                      dispatch({
+                        type: "relevance",
+                        payload: {
+                          value: rString,
+                        },
+                      });
+                    }}
+                    size={23}
+                  />
+                </li>
+              );
+            })
+          : null}
+        {selectedLanguages?.length
+          ? selectedLanguages.map((lang) => {
+              return (
+                <li className="single-filter ">
+                  <b> Language Aud:</b> {lang.name}{" "}
+                  {`>  ${(lang.weight * 100).toFixed(0)}%`}{" "}
+                  <GrFormClose
+                    onClick={() => {
+                      const k = selectedLanguages.filter(
+                        (c) => lang.code !== c.code,
+                      );
+                      setSelectedLanguages(k);
+                      dispatch({
+                        type: "audience_lang",
+                        payload: k,
+                      });
+                    }}
+                    className=" "
+                    size={23}
+                  />
+                </li>
+              );
+            })
+          : null}
+        {selectedInfLanguages?.length
+          ? selectedInfLanguages.map((lang) => {
+              return (
+                <li className="single-filter ">
+                  <b> Language Inf:</b> {lang.name}
+                  <GrFormClose
+                    onClick={() => {
+                      const k = selectedInfLanguages.filter(
+                        (c) => lang.code !== c.code,
+                      );
+
+                      setSelectedInfLanguages(k);
+                      const langCodes = k.map((item) => ({
+                        code: item.code,
+                      }));
+                      dispatch({
+                        type: "lang",
+                        payload: langCodes,
+                      });
+                    }}
+                    className=" "
+                    size={23}
+                  />
+                </li>
+              );
+            })
+          : null}
+        {lastPost ? (
+          <li className="single-filter ">
+            <b> Last Post:</b> {lastPost / 30}{" "}
+            {lastPost / 30 > 1 ? "Months" : "Month"}
+            <GrFormClose
+              onClick={() => {
+                setlastPost("");
+                dispatch({
+                  type: "audience_relevance",
+                  payload: null,
+                });
+              }}
+              className=" "
+              size={23}
+            />
+          </li>
+        ) : null}
+        {selectedGrowth?.interval ? (
+          <li className="single-filter">
+            <b> Followers Growth:</b> {selectedGrowth.name}
+            <GrFormClose
+              onClick={() => {
+                setSelectedGrowth({});
+                dispatch({
+                  type: "followers_growth",
+                  payload: {},
+                });
+              }}
+              className=" "
+              size={23}
+            />
+          </li>
+        ) : null}
+        {isVerified ? (
+          <li className="single-filter">
+            Only Verified
+            <GrFormClose
+              onClick={() => {
+                setSelectedGrowth({});
+                dispatch({
+                  type: "followers_growth",
+                  payload: {},
+                });
+              }}
+              className=" "
+              size={23}
+            />
+          </li>
+        ) : null}
+        {hasAudData ? (
+          <li className="single-filter">
+            Has Audience
+            <GrFormClose
+              onClick={() => {
+                setHasAudData(false);
+                dispatch({
+                  type: "has_audience_data",
+                  payload: false,
+                });
+              }}
+              className=" "
+              size={23}
+            />
+          </li>
+        ) : null}
+        {selectedAudAges?.length ? (
+          <li className="single-filter">
+            <b> Age Aud:</b> {selectedAudAges[0].code.split("-")[0]} -{" "}
+            {selectedAudAges[1]
+              ? selectedAudAges[selectedAudAges.length - 1].code.split("-")[1]
+                ? selectedAudAges[selectedAudAges.length - 1].code.split("-")[1]
+                : "y.o"
+              : selectedAudAges[0].code.split("-")[1]}{" "}
+            {`>  ${(selectedAudAges[0]?.weight * 100).toFixed(0)}%`}
+            <GrFormClose
+              onClick={() => {
+                setSelectedGrowth({});
+                dispatch({
+                  type: "followers_growth",
+                  payload: {},
+                });
+              }}
+              className=" "
+              size={23}
+            />
+          </li>
+        ) : null}
+        {ageInflu.left_number || ageInflu.right_number ? (
+          <li className="single-filter ">
+            <b> Views:</b> {ageInflu?.left_number?.toFixed(0)}{" "}
+            {ageInflu?.right_number ? "-" : "+"}
+            {ageInflu?.right_number?.toFixed(0)}
+            <GrFormClose
+              onClick={() => {
+                setAgeInflu({
+                  left_number: null,
+                  right_number: null,
+                });
+                dispatch({
+                  type: "avg_views",
+                  payload: {
+                    left_number: null,
+                    right_number: null,
+                  },
+                });
+              }}
+              className=" "
+              size={23}
+            />
+          </li>
+        ) : null}
       </ul>
+
       <DashboardList
         handlePageNumber={handlePageNumber}
         currentPage={currentPage}

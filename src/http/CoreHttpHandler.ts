@@ -7,7 +7,8 @@ class HttpHandler {
   static makeRequest(
     endpoint: string,
     method: string,
-    data?: any
+    data?: any,
+    cancleToken? : any 
   ): Promise<any> {
     const config: AxiosRequestConfig = {
       url: `${this.baseUrl}${endpoint}`,
@@ -17,7 +18,7 @@ class HttpHandler {
         "Content-Type": "application/json",
         Authorization: `Bearer ${JSON.parse(localStorage.getItem("isUserLogged"))}`,
       },
-      cancelToken: source.token,
+      cancelToken: cancleToken,
     };
     return axios(config);
   }

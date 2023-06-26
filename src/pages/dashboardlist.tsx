@@ -3,7 +3,7 @@ import { Table, Button, Input, FormGroup, Label } from "reactstrap";
 import { FormatNumber, AuthFunction, LoadingButton } from "../components";
 import { useMutation } from "@tanstack/react-query";
 import { AxiosResponse, AxiosError } from "axios";
-import HttpHandler from "../http/services/CoreHttpHandler";
+import HttpHandler from "../http/CoreHttpHandler";
 import { Link } from "react-router-dom";
 import { AiOutlineLineChart } from "react-icons/ai";
 import { SlArrowDown } from "react-icons/sl";

@@ -8,7 +8,7 @@ import {
   Input,
 } from "reactstrap";
 import { useLocation } from "react-router-dom";
-import HttpHandler from "../http/services/CoreHttpHandler";
+import HttpHandler from "../http/CoreHttpHandler";
 import { useState, useEffect, memo } from "react";
 import { AxiosResponse, AxiosError } from "axios";
 import { useMutation } from "@tanstack/react-query";
@@ -342,7 +342,7 @@ const UserReports = (): JSX.Element => {
                 </Input>
               </Col>
               <p className="date">
-                Updated:{" "}
+                Updated: 1{" "}
                 {moment(userData?.report_info?.profile_updated).format(
                   "DD MMM YYYY",
                 )}

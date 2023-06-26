@@ -7,7 +7,7 @@ import {
   Button,
   CardBody,
 } from "reactstrap";
-import HttpHandler from "../http/services/CoreHttpHandler";
+import HttpHandler from "../http/CoreHttpHandler";
 import { useState, useCallback, useContext } from "react";
 import { FormatNumber } from "../components";
 import TicTok from "../assets/images/tiktik.png";
