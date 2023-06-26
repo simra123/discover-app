@@ -451,7 +451,7 @@ const TikTokList = (): JSX.Element => {
             ...state.filters,
             engagement_rate: {
               operator: "gte",
-              value: 0.05,
+              value: action.payload,
             },
           },
         };
@@ -1382,7 +1382,7 @@ const TikTokList = (): JSX.Element => {
                             if (e.key === "Enter") {
                               dispatch({
                                 type: "bio",
-                                payload: bio,
+                                payload: e.target.value,
                               });
                               setBio(e.target.value);
                             }
@@ -2689,10 +2689,10 @@ const TikTokList = (): JSX.Element => {
             {`>  ${(selectedAudAges[0]?.weight * 100).toFixed(0)}%`}
             <GrFormClose
               onClick={() => {
-                setSelectedGrowth({});
+                setSelectedAudAges([]);
                 dispatch({
-                  type: "followers_growth",
-                  payload: {},
+                  type: "audience_age",
+                  payload: [],
                 });
               }}
               className=" "
@@ -2702,7 +2702,7 @@ const TikTokList = (): JSX.Element => {
         ) : null}
         {ageInflu.left_number || ageInflu.right_number ? (
           <li className="single-filter ">
-            <b> Views:</b> {ageInflu?.left_number?.toFixed(0)}{" "}
+            <b> Inf Age:</b> {ageInflu?.left_number?.toFixed(0)}{" "}
             {ageInflu?.right_number ? "-" : "+"}
             {ageInflu?.right_number?.toFixed(0)}
             <GrFormClose
@@ -2712,7 +2712,7 @@ const TikTokList = (): JSX.Element => {
                   right_number: null,
                 });
                 dispatch({
-                  type: "avg_views",
+                  type: "age",
                   payload: {
                     left_number: null,
                     right_number: null,
