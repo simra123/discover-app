@@ -1,6 +1,7 @@
 import React from "react";
 import { Link } from "react-router-dom";
 import { Table, Modal, ModalHeader, ModalBody } from "reactstrap";
+import { FormatNumber } from ".";
 
 interface ModalProps {
   modal: boolean;
@@ -41,8 +42,8 @@ const ModalProfile: React.FC<ModalProps> = ({ modal, setModal, data }) => {
               return (
                 <tr key={val?.xAxis}>
                   <td>{val.created}</td>
-                  <td>{val.likes}</td>
-                  <td>{val.comments}</td>
+                  <td>{FormatNumber(val.likes)}</td>
+                  <td>{FormatNumber(val.comments)}</td>
                   <td>
                     {" "}
                     <small>

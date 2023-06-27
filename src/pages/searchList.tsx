@@ -38,7 +38,7 @@ import Languages from "../content/languages.json";
 import { AiOutlinePlus, AiOutlineMinus } from "react-icons/ai";
 import { AiFillCloseCircle } from "react-icons/ai";
 import { debounce } from "lodash";
-import { GrFormClose } from "react-icons/gr";
+import { IoCloseOutline } from "react-icons/io5";
 const TikTokList = (): JSX.Element => {
   const [showDropdown, setShowDropdown] = useState<number | null>(null);
 
@@ -193,37 +193,37 @@ const TikTokList = (): JSX.Element => {
   ];
   const growthMonths = [
     {
-      interval: 30,
+      interval: 1,
       operator: "gte",
       value: "0.05",
       name: "1 months",
     },
     {
-      interval: 30 * 2,
+      interval: 2,
       operator: "gte",
       value: "0.05",
       name: "2 months",
     },
     {
-      interval: 30 * 3,
+      interval: 3,
       operator: "gte",
       value: "0.05",
       name: "3 months",
     },
     {
-      interval: 3 * 4,
+      interval: 4,
       operator: "gte",
       value: "0.05",
       name: "4 months",
     },
     {
-      interval: 30 * 5,
+      interval: 5,
       operator: "gte",
       value: "0.05",
       name: "5 months",
     },
     {
-      interval: 30 * 6,
+      interval: 6,
       operator: "gte",
       value: "0.05",
       name: "6 months",
@@ -275,7 +275,7 @@ const TikTokList = (): JSX.Element => {
   const [selectedInfCountries, setSelectedInfCountries] = useState([]);
   const [selectedInfContacts, setSelectedInfContacts] = useState([]);
   const [selectedLanguages, setSelectedLanguages] = useState([]);
-  const [selectedInfLanguages, setSelectedInfLanguages] = useState([]);
+  const [selectedInfLanguages, setSelectedInfLanguages] = useState({});
   const [selectedAudUsers, setSelectedAudUsers] = useState<string>("");
   const [selectedContentUsers, setSelectedContentUsers] = useState<string[]>(
     [],
@@ -296,7 +296,6 @@ const TikTokList = (): JSX.Element => {
   const [isPagination, setIsPagination] = useState(false);
   const [audienceG, setAudienceG] = useState<GenderTypes | null>(null);
   const [influencerG, setInfluencerG] = useState<GenderTypes | null>(null);
-  const [prevData, setPrevData] = useState([]);
   const [showCard, setShowCard] = useState<boolean>(false);
   const [hashTagsData, setHashTagsData] = useState<[]>([]);
   const [hasAudData, setHasAudData] = useState<boolean>(false);
@@ -324,6 +323,63 @@ const TikTokList = (): JSX.Element => {
   });
   const [engageRate, setEngageRate] = useState<number | null>(null);
 
+  const clearAll = () => {
+    setSelectedCountries([]);
+    setSelectedInfCountries([]);
+    setSelectedInfContacts([]);
+    setSelectedLanguages([]);
+    setSelectedInfLanguages({});
+    setSelectedAudUsers("");
+    setSelectedContentUsers([]);
+    setSelectedGrowth({});
+    setRelevanceString({ value: [] });
+    setAudRelevanceString("");
+    setIsVerified(false);
+    setSelectedAudAges([]);
+    setAudienceG(null);
+    setInfluencerG(null);
+    setHashTagsData([]);
+    setHasAudData(false);
+    setKeywords("");
+    setBio("");
+    setlastPost(null);
+    setUserProfiles([]);
+    setFollowersRange({ left_number: null, right_number: null });
+    setEnagagementsRange({ left_number: null, right_number: null });
+    setViewsRange({ left_number: null, right_number: null });
+    setAgeInflu({ left_number: null, right_number: null });
+    setEngageRate(null);
+  };
+  const shouldRenderFilter =
+    selectedCountries.length > 0 ||
+    selectedInfCountries.length > 0 ||
+    selectedInfContacts.length > 0 ||
+    selectedLanguages.length > 0 ||
+    Object.keys(selectedInfLanguages).length > 0 ||
+    selectedAudUsers !== "" ||
+    selectedContentUsers.length > 0 ||
+    Object.keys(selectedGrowth).length > 0 ||
+    relevanceString.value.length > 0 ||
+    audRelevanceString !== "" ||
+    isVerified ||
+    selectedAudAges.length > 0 ||
+    audienceG !== null ||
+    influencerG !== null ||
+    hashTagsData.length > 0 ||
+    hasAudData ||
+    keywords !== "" ||
+    bio !== "" ||
+    lastPost !== null ||
+    userProfiles.length > 0 ||
+    followersRange.left_number !== null ||
+    followersRange.right_number !== null ||
+    enagagementsRange.left_number !== null ||
+    enagagementsRange.right_number !== null ||
+    viewsRange.left_number !== null ||
+    viewsRange.right_number !== null ||
+    ageInflu.left_number !== null ||
+    ageInflu.right_number !== null ||
+    engageRate !== null;
   const rangeFollowers: number[] = [
     100, 200, 300, 400, 500, 1000, 5000, 10000, 50000, 100000, 500000, 1000000,
   ];
@@ -612,6 +668,10 @@ const TikTokList = (): JSX.Element => {
           },
         };
       }
+      case "reset": {
+        setCurrentPage(2);
+        return action.payload;
+      }
     }
 
     throw Error("Unknown action: " + action.type);
@@ -816,7 +876,25 @@ const TikTokList = (): JSX.Element => {
       payload: currentPage,
     });
   };
-  console.log(selectedAudAges, "aud");
+  const customStyles = {
+    control: (provided: any, state: any) => ({
+      ...provided,
+      borderColor: state.isFocused ? "black" : "gray",
+      color: "15px",
+      height: "18px",
+      width: "190px",
+      fontSize: "12px",
+      boxShadow: state.isFocused ? "0 0 0 1px black" : "none",
+      "&:hover": { borderColor: "black" },
+    }),
+    option: (provided: any) => ({
+      ...provided,
+      fontSize: "13px",
+      // backgroundColor: state.isFocused ? "blue" : "white",
+      color: "black",
+      "&:hover": { backgroundColor: "black", color: "white" },
+    }),
+  };
 
   return (
     <>
@@ -835,7 +913,6 @@ const TikTokList = (): JSX.Element => {
                 onClick={() => {
                   setShowDropdown(showDropdown == 1 ? null : 1);
                 }}
-                className="ms-1 "
                 color="light"
               >
                 Location <SlArrowDown size={11} className="mx-1" />
@@ -849,6 +926,7 @@ const TikTokList = (): JSX.Element => {
                         <Select
                           placeholder="Your Country"
                           // defaultValue={Countries[0]}
+                          styles={customStyles}
                           options={Countries}
                           onChange={(e) => {
                             setSelectedCountries([...selectedCountries, e]);
@@ -923,7 +1001,7 @@ const TikTokList = (): JSX.Element => {
 
                         <Select
                           placeholder="Your Country"
-                          // defaultValue={Countries[0]}
+                          styles={customStyles}
                           options={Countries}
                           onChange={(e) => {
                             setSelectedInfCountries([
@@ -977,7 +1055,6 @@ const TikTokList = (): JSX.Element => {
                 onClick={() => {
                   setShowDropdown(showDropdown == 2 ? null : 2);
                 }}
-                className="ms-1 "
                 color="light"
               >
                 Gender <SlArrowDown size={11} className="mx-1" />
@@ -1117,7 +1194,6 @@ const TikTokList = (): JSX.Element => {
                 onClick={() => {
                   setShowDropdown(showDropdown == 3 ? null : 3);
                 }}
-                className="ms-1 "
                 color="light"
               >
                 Keywords <SlArrowDown size={11} className="mx-1" />
@@ -1149,7 +1225,6 @@ const TikTokList = (): JSX.Element => {
                 onClick={() => {
                   setShowDropdown(showDropdown == 4 ? null : 4);
                 }}
-                className="ms-1 "
                 color="light"
               >
                 followers
@@ -1226,7 +1301,6 @@ const TikTokList = (): JSX.Element => {
                 onClick={() => {
                   setShowDropdown(showDropdown == 5 ? null : 5);
                 }}
-                className="ms-1 "
                 color="light"
               >
                 Enagagements
@@ -1366,7 +1440,6 @@ const TikTokList = (): JSX.Element => {
                   onClick={() => {
                     setShowDropdown(showDropdown == 6 ? null : 6);
                   }}
-                  className="ms-1 "
                   color="light"
                 >
                   Bio <SlArrowDown size={11} className="mx-1" />
@@ -1398,7 +1471,6 @@ const TikTokList = (): JSX.Element => {
                   onClick={() => {
                     setShowDropdown(showDropdown == 7 ? null : 7);
                   }}
-                  className="ms-1 "
                   color="light"
                 >
                   Views
@@ -1486,7 +1558,6 @@ const TikTokList = (): JSX.Element => {
                   onClick={() => {
                     setShowDropdown(showDropdown == 8 ? null : 8);
                   }}
-                  className="ms-1 "
                   color="light"
                 >
                   Contacts <SlArrowDown size={11} className="mx-1" />
@@ -1500,6 +1571,7 @@ const TikTokList = (): JSX.Element => {
                         placeholder="add Contacts"
                         // defaultValue={Countries[0]}
                         options={Contacts}
+                        styles={customStyles}
                         onChange={(e) => {
                           setSelectedInfContacts([...selectedInfContacts, e]);
 
@@ -1541,7 +1613,6 @@ const TikTokList = (): JSX.Element => {
                   onClick={() => {
                     setShowDropdown(showDropdown == 9 ? null : 9);
                   }}
-                  className="ms-1 "
                   color="light"
                 >
                   Lookalikes
@@ -1723,7 +1794,6 @@ const TikTokList = (): JSX.Element => {
                   onClick={() => {
                     setShowDropdown(showDropdown == 10 ? null : 10);
                   }}
-                  className="ms-1 "
                   color="light"
                 >
                   Hashtags
@@ -1800,7 +1870,6 @@ const TikTokList = (): JSX.Element => {
                   onClick={() => {
                     setShowDropdown(showDropdown == 11 ? null : 11);
                   }}
-                  className="ms-1 "
                   color="light"
                 >
                   Language
@@ -1815,6 +1884,7 @@ const TikTokList = (): JSX.Element => {
                           <Select
                             placeholder="Add language"
                             // defaultValue={Countries[0]}
+                            styles={customStyles}
                             options={Languages}
                             onChange={(e) => {
                               setSelectedLanguages([...selectedLanguages, e]);
@@ -1868,6 +1938,13 @@ const TikTokList = (): JSX.Element => {
                                         },
                                       ],
                                     });
+                                    setSelectedLanguages([
+                                      ...k,
+                                      {
+                                        ...val,
+                                        weight: Number(e.target.value),
+                                      },
+                                    ]);
                                   }}
                                 >
                                   {/* <option> {">" + val.weight * 100}%</option> */}
@@ -1889,55 +1966,43 @@ const TikTokList = (): JSX.Element => {
 
                           <Select
                             placeholder="Add Languague"
-                            // defaultValue={Countries[0]}
+                            styles={customStyles}
                             options={Languages}
                             onChange={(e) => {
-                              setSelectedInfLanguages([
-                                ...selectedInfLanguages,
-                                e,
-                              ]);
-                              const langCodes = [
-                                ...selectedInfLanguages,
-                                e,
-                              ].map((item) => ({
-                                code: item.code,
-                              }));
+                              setSelectedInfLanguages({
+                                code: e.code,
+                                name: e.name,
+                              });
+
                               dispatch({
                                 type: "lang",
-                                payload: langCodes,
+                                payload: {
+                                  code: e.code,
+                                },
                               });
                             }}
                             getOptionLabel={(option) => option.name}
                             getOptionValue={(option) => option.code}
                           />
-                          {selectedInfLanguages?.map((val, i) => {
-                            return (
-                              <div
-                                key={val.code}
-                                className="d-flex location-geo"
-                              >
-                                <AiFillCloseCircle
-                                  onClick={() => {
-                                    const k = selectedInfLanguages.filter(
-                                      (c) => val.code !== c.code,
-                                    );
+                          {selectedInfLanguages?.code && (
+                            <div className="d-flex location-geo">
+                              <AiFillCloseCircle
+                                onClick={() => {
+                                  setSelectedInfLanguages({});
 
-                                    setSelectedInfLanguages(k);
-                                    const langCodes = k.map((item) => ({
-                                      code: item.code,
-                                    }));
-                                    dispatch({
-                                      type: "lang",
-                                      payload: langCodes,
-                                    });
-                                  }}
-                                  className=" mt-2"
-                                  size={20}
-                                />
-                                <span className="m-2 ">{val.name}</span>
-                              </div>
-                            );
-                          })}
+                                  dispatch({
+                                    type: "lang",
+                                    payload: {},
+                                  });
+                                }}
+                                className=" mt-2"
+                                size={20}
+                              />
+                              <span className="m-2 ">
+                                {selectedInfLanguages.name}
+                              </span>
+                            </div>
+                          )}
                         </Col>
                       </Row>
                     </CardBody>
@@ -1949,7 +2014,6 @@ const TikTokList = (): JSX.Element => {
                   onClick={() => {
                     setShowDropdown(showDropdown == 12 ? null : 12);
                   }}
-                  className="ms-1 "
                   color="light"
                 >
                   Age
@@ -2109,7 +2173,6 @@ const TikTokList = (): JSX.Element => {
                   onClick={() => {
                     setShowDropdown(showDropdown == 13 ? null : 13);
                   }}
-                  className="ms-1 "
                   color="light"
                 >
                   Last Post <SlArrowDown size={11} className="mx-1" />
@@ -2158,7 +2221,6 @@ const TikTokList = (): JSX.Element => {
                   onClick={() => {
                     setShowDropdown(showDropdown == 14 ? null : 14);
                   }}
-                  className="ms-1 "
                   color="light"
                 >
                   Growing
@@ -2187,7 +2249,7 @@ const TikTokList = (): JSX.Element => {
                           return <option value={v.interval}>{v.name}</option>;
                         })}
                       </Input>
-                      {/* {selectedGrowth?.interval && (
+                      {selectedGrowth?.interval && (
                         <Input
                           type="select"
                           className="w-100 mt-2"
@@ -2195,9 +2257,16 @@ const TikTokList = (): JSX.Element => {
                           onChange={(e) => {
                             setSelectedGrowth({
                               ...selectedGrowth,
-                              value: e.target.value,
+                              value: Number(e.target.value),
                             });
-                          
+                            dispatch({
+                              type: "followers_growth",
+                              payload: {
+                                ...selectedGrowth,
+                                value: Number(e.target.value),
+                              },
+                            });
+                          }}
                         >
                           {weight.slice(0, 5).map((v) => {
                             return (
@@ -2207,7 +2276,8 @@ const TikTokList = (): JSX.Element => {
                               </option>
                             );
                           })}
-                        </Input> */}
+                        </Input>
+                      )}
                     </CardBody>
                   </Card>
                 )}
@@ -2217,7 +2287,6 @@ const TikTokList = (): JSX.Element => {
                   onClick={() => {
                     setShowDropdown(showDropdown == 15 ? null : 15);
                   }}
-                  className="ms-1 "
                   color="light"
                 >
                   ... <SlArrowDown size={11} className="mx-1" />
@@ -2271,460 +2340,475 @@ const TikTokList = (): JSX.Element => {
           )}
         </Row>
       </Card>
-      <ul className="selected-filers  mt-1">
-        <li className="d-inline-block">Filters:</li>
-        {selectedCountries?.length
-          ? selectedCountries.map((country) => {
-              return (
-                <li className="single-filter ">
-                  <b> Location Aud:</b> {country.name} {`>  ${country.weight}`}{" "}
-                  <GrFormClose
-                    onClick={() => {
-                      const k = selectedCountries.filter(
-                        (c) => country.code !== c.code,
-                      );
-                      setSelectedCountries(k);
-                      dispatch({
-                        type: "audience_geo",
-                        payload: k,
-                      });
-                    }}
-                    className=" "
-                    size={23}
-                  />
-                </li>
-              );
-            })
-          : null}
-        {selectedInfCountries?.length
-          ? selectedInfCountries.map((country) => {
-              return (
-                <li className="single-filter ">
-                  <b> Location Inf:</b> {country.name} {`>  ${country.weight}`}{" "}
-                  <GrFormClose
-                    onClick={() => {
-                      const k = selectedInfCountries.filter(
-                        (c) => val.code !== c.code,
-                      );
-                      setSelectedInfCountries(k);
-                      const countryCodes = k.map((country) => country.code);
-                      dispatch({
-                        type: "geo",
-                        payload: countryCodes,
-                      });
-                    }}
-                    className=" "
-                    size={23}
-                  />
-                </li>
-              );
-            })
-          : null}
+      {shouldRenderFilter ? (
+        <ul className="selected-filers  mt-1">
+          <li className="d-inline-block">Filters:</li>
+          {selectedCountries?.length
+            ? selectedCountries.map((country) => {
+                return (
+                  <li className="single-filter ">
+                    <b> Location Aud:</b> {country.name}{" "}
+                    {`>  ${country.weight}`}{" "}
+                    <IoCloseOutline
+                      onClick={() => {
+                        const k = selectedCountries.filter(
+                          (c) => country.code !== c.code,
+                        );
+                        setSelectedCountries(k);
+                        dispatch({
+                          type: "audience_geo",
+                          payload: k,
+                        });
+                      }}
+                      className=" "
+                      size={23}
+                    />
+                  </li>
+                );
+              })
+            : null}
+          {selectedInfCountries?.length
+            ? selectedInfCountries.map((country) => {
+                return (
+                  <li className="single-filter ">
+                    <b> Location Inf:</b> {country.name}{" "}
+                    {`>  ${country.weight}`}{" "}
+                    <IoCloseOutline
+                      onClick={() => {
+                        const k = selectedInfCountries.filter(
+                          (c) => val.code !== c.code,
+                        );
+                        setSelectedInfCountries(k);
+                        const countryCodes = k.map((country) => country.code);
+                        dispatch({
+                          type: "geo",
+                          payload: countryCodes,
+                        });
+                      }}
+                      className=" "
+                      size={23}
+                    />
+                  </li>
+                );
+              })
+            : null}
 
-        {audienceG ? (
-          <li className="single-filter ">
-            <b> Gender Aud:</b> {audienceG.name}{" "}
-            {`>  ${(audienceG.weight * 100).toFixed(0)}%`}
-            <GrFormClose
-              onClick={() => {
-                setAudienceG(null);
-                dispatch({
-                  type: "audience_gender",
-                  payload: {},
-                });
-              }}
-              className=" "
-              size={23}
-            />
-          </li>
-        ) : null}
-        {influencerG ? (
-          <li className="single-filter ">
-            <b> Gender Inf:</b> {influencerG.name}
-            <GrFormClose
-              onClick={() => {
-                setInfluencerG(null);
-                dispatch({
-                  type: "gender",
-                  payload: {},
-                });
-              }}
-              className=" "
-              size={23}
-            />
-          </li>
-        ) : null}
-        {keywords ? (
-          <li className="single-filter ">
-            <b> Keywords Inf:</b> {keywords}
-            <GrFormClose
-              onClick={() => {
-                setKeywords("");
-                dispatch({
-                  type: "keywords",
-                  payload: "",
-                });
-              }}
-              className=" "
-              size={23}
-            />
-          </li>
-        ) : null}
-        {followersRange.left_number || followersRange.right_number ? (
-          <li className="single-filter ">
-            <b> Followers:</b> {FormatNumber(followersRange?.left_number)} -
-            {FormatNumber(followersRange?.right_number)}
-            <GrFormClose
-              onClick={() => {
-                setFollowersRange({
-                  left_number: null,
-                  right_number: null,
-                });
-                dispatch({
-                  type: "followers-range",
-                  payload: {
+          {audienceG ? (
+            <li className="single-filter ">
+              <b> Gender Aud:</b> {audienceG.name}{" "}
+              {`>  ${(audienceG.weight * 100).toFixed(0)}%`}
+              <IoCloseOutline
+                onClick={() => {
+                  setAudienceG(null);
+                  dispatch({
+                    type: "audience_gender",
+                    payload: {},
+                  });
+                }}
+                className=" "
+                size={23}
+              />
+            </li>
+          ) : null}
+          {influencerG ? (
+            <li className="single-filter ">
+              <b> Gender Inf:</b> {influencerG.name}
+              <IoCloseOutline
+                onClick={() => {
+                  setInfluencerG(null);
+                  dispatch({
+                    type: "gender",
+                    payload: {},
+                  });
+                }}
+                className=" "
+                size={23}
+              />
+            </li>
+          ) : null}
+          {keywords ? (
+            <li className="single-filter ">
+              <b> Keywords Inf:</b> {keywords}
+              <IoCloseOutline
+                onClick={() => {
+                  setKeywords("");
+                  dispatch({
+                    type: "keywords",
+                    payload: "",
+                  });
+                }}
+                className=" "
+                size={23}
+              />
+            </li>
+          ) : null}
+          {followersRange.left_number || followersRange.right_number ? (
+            <li className="single-filter ">
+              <b> Followers:</b> {FormatNumber(followersRange?.left_number)} -
+              {FormatNumber(followersRange?.right_number)}
+              <IoCloseOutline
+                onClick={() => {
+                  setFollowersRange({
                     left_number: null,
                     right_number: null,
-                  },
-                });
-              }}
-              className=" "
-              size={23}
-            />
-          </li>
-        ) : null}
-        {enagagementsRange.left_number || enagagementsRange.right_number ? (
-          <li className="single-filter ">
-            <b> Engagements:</b> {FormatNumber(enagagementsRange?.left_number)}-
-            {FormatNumber(enagagementsRange?.right_number)}
-            <GrFormClose
-              onClick={() => {
-                setEnagagementsRange({
-                  left_number: null,
-                  right_number: null,
-                });
-                dispatch({
-                  type: "engagements",
-                  payload: {
+                  });
+                  dispatch({
+                    type: "followers-range",
+                    payload: {
+                      left_number: null,
+                      right_number: null,
+                    },
+                  });
+                }}
+                className=" "
+                size={23}
+              />
+            </li>
+          ) : null}
+          {enagagementsRange.left_number || enagagementsRange.right_number ? (
+            <li className="single-filter ">
+              <b> Engagements:</b>{" "}
+              {FormatNumber(enagagementsRange?.left_number)}-
+              {FormatNumber(enagagementsRange?.right_number)}
+              <IoCloseOutline
+                onClick={() => {
+                  setEnagagementsRange({
                     left_number: null,
                     right_number: null,
-                  },
-                });
-              }}
-              className=" "
-              size={23}
-            />
-          </li>
-        ) : null}
-        {engageRate ? (
-          <li className="single-filter ">
-            <b> Engagement Rate: </b> &#8805;{(engageRate * 100).toFixed(0)}%
-            <GrFormClose
-              onClick={() => {
-                setEngageRate(null);
-                dispatch({
-                  type: "engagement_rate",
-                  payload: null,
-                });
-              }}
-              className=" "
-              size={23}
-            />
-          </li>
-        ) : null}
-        {bio ? (
-          <li className="single-filter ">
-            <b> Bio Inf:</b> {bio}
-            <GrFormClose
-              onClick={() => {
-                setBio("");
-                dispatch({
-                  type: "bio",
-                  payload: "",
-                });
-              }}
-              className=" "
-              size={23}
-            />
-          </li>
-        ) : null}
-        {viewsRange.left_number || viewsRange.right_number ? (
-          <li className="single-filter ">
-            <b> Views:</b> {FormatNumber(viewsRange?.left_number)}{" "}
-            {viewsRange?.right_number ? "-" : "+"}
-            {FormatNumber(viewsRange?.right_number)}
-            <GrFormClose
-              onClick={() => {
-                setViewsRange({
-                  left_number: null,
-                  right_number: null,
-                });
-                dispatch({
-                  type: "avg_views",
-                  payload: {
+                  });
+                  dispatch({
+                    type: "engagements",
+                    payload: {
+                      left_number: null,
+                      right_number: null,
+                    },
+                  });
+                }}
+                className=" "
+                size={23}
+              />
+            </li>
+          ) : null}
+          {engageRate ? (
+            <li className="single-filter ">
+              <b> Engagement Rate: </b> &#8805;{(engageRate * 100).toFixed(0)}%
+              <IoCloseOutline
+                onClick={() => {
+                  setEngageRate(null);
+                  dispatch({
+                    type: "engagement_rate",
+                    payload: null,
+                  });
+                }}
+                className=" "
+                size={23}
+              />
+            </li>
+          ) : null}
+          {bio ? (
+            <li className="single-filter ">
+              <b> Bio Inf:</b> {bio}
+              <IoCloseOutline
+                onClick={() => {
+                  setBio("");
+                  dispatch({
+                    type: "bio",
+                    payload: "",
+                  });
+                }}
+                className=" "
+                size={23}
+              />
+            </li>
+          ) : null}
+          {viewsRange.left_number || viewsRange.right_number ? (
+            <li className="single-filter ">
+              <b> Views:</b> {FormatNumber(viewsRange?.left_number)}{" "}
+              {viewsRange?.right_number ? "-" : "+"}
+              {FormatNumber(viewsRange?.right_number)}
+              <IoCloseOutline
+                onClick={() => {
+                  setViewsRange({
                     left_number: null,
                     right_number: null,
-                  },
-                });
-              }}
-              className=" "
-              size={23}
-            />
-          </li>
-        ) : null}
-        {selectedInfContacts?.length
-          ? selectedInfContacts.map((val) => {
-              return (
-                <li className="single-filter ">
-                  {val.name}
-                  <GrFormClose
-                    onClick={() => {
-                      const k = selectedInfContacts.filter(
-                        (c) => val.type !== c.type,
-                      );
-                      setSelectedInfContacts(k);
-                      dispatch({
-                        type: "contacts",
-                        payload: k,
-                      });
-                    }}
-                    size={23}
-                  />
-                </li>
-              );
-            })
-          : null}
-        {selectedAudUsers ? (
-          <li className="single-filter ">
-            <b> Lookalike:</b> {selectedAudUsers}
-            <GrFormClose
-              onClick={() => {
-                setSelectedAudUsers("");
-                dispatch({
-                  type: "audience_relevance",
-                  payload: null,
-                });
-              }}
-              className=" "
-              size={23}
-            />
-          </li>
-        ) : null}
-        {selectedContentUsers?.length
-          ? selectedContentUsers.map((val) => {
-              return (
-                <li className="single-filter ">
-                  <b> Similar:</b> {val}
-                  <GrFormClose
-                    onClick={() => {
-                      const k = selectedContentUsers.filter((c) => val !== c);
-                      setSelectedContentUsers(k);
-                      const rString = [...relevanceString.value, ...k]
-                        .toString()
-                        .replace(/,/g, " ");
+                  });
+                  dispatch({
+                    type: "avg_views",
+                    payload: {
+                      left_number: null,
+                      right_number: null,
+                    },
+                  });
+                }}
+                className=" "
+                size={23}
+              />
+            </li>
+          ) : null}
+          {selectedInfContacts?.length
+            ? selectedInfContacts.map((val) => {
+                return (
+                  <li className="single-filter ">
+                    {val.name}
+                    <IoCloseOutline
+                      onClick={() => {
+                        const k = selectedInfContacts.filter(
+                          (c) => val.type !== c.type,
+                        );
+                        setSelectedInfContacts(k);
+                        dispatch({
+                          type: "contacts",
+                          payload: k,
+                        });
+                      }}
+                      size={23}
+                    />
+                  </li>
+                );
+              })
+            : null}
+          {selectedAudUsers ? (
+            <li className="single-filter ">
+              <b> Lookalike:</b> {selectedAudUsers}
+              <IoCloseOutline
+                onClick={() => {
+                  setSelectedAudUsers("");
+                  dispatch({
+                    type: "audience_relevance",
+                    payload: null,
+                  });
+                }}
+                className=" "
+                size={23}
+              />
+            </li>
+          ) : null}
+          {selectedContentUsers?.length
+            ? selectedContentUsers.map((val) => {
+                return (
+                  <li className="single-filter ">
+                    <b> Similar:</b> {val}
+                    <IoCloseOutline
+                      onClick={() => {
+                        const k = selectedContentUsers.filter((c) => val !== c);
+                        setSelectedContentUsers(k);
+                        const rString = [...relevanceString.value, ...k]
+                          .toString()
+                          .replace(/,/g, " ");
 
-                      dispatch({
-                        type: "relevance",
-                        payload: {
-                          value: rString,
-                        },
-                      });
-                    }}
-                    size={23}
-                  />
-                </li>
-              );
-            })
-          : null}
-        {relevanceString?.value?.length
-          ? relevanceString.value?.map((val) => {
-              return (
-                <li className="single-filter ">
-                  <b> #</b> {val.split("#")[1]}
-                  <GrFormClose
-                    onClick={() => {
-                      const k = relevanceString.value.filter((c) => val !== c);
-                      setRelevanceString({
-                        value: [...k],
-                      });
-                      const rString = [...k].toString().replace(/,/g, " ");
+                        dispatch({
+                          type: "relevance",
+                          payload: {
+                            value: rString,
+                          },
+                        });
+                      }}
+                      size={23}
+                    />
+                  </li>
+                );
+              })
+            : null}
+          {relevanceString?.value?.length
+            ? relevanceString.value?.map((val) => {
+                return (
+                  <li className="single-filter ">
+                    <b> #</b> {val.split("#")[1]}
+                    <IoCloseOutline
+                      onClick={() => {
+                        const k = relevanceString.value.filter(
+                          (c) => val !== c,
+                        );
+                        setRelevanceString({
+                          value: [...k],
+                        });
+                        const rString = [...k].toString().replace(/,/g, " ");
 
-                      dispatch({
-                        type: "relevance",
-                        payload: {
-                          value: rString,
-                        },
-                      });
-                    }}
-                    size={23}
-                  />
-                </li>
-              );
-            })
-          : null}
-        {selectedLanguages?.length
-          ? selectedLanguages.map((lang) => {
-              return (
-                <li className="single-filter ">
-                  <b> Language Aud:</b> {lang.name}{" "}
-                  {`>  ${(lang.weight * 100).toFixed(0)}%`}{" "}
-                  <GrFormClose
-                    onClick={() => {
-                      const k = selectedLanguages.filter(
-                        (c) => lang.code !== c.code,
-                      );
-                      setSelectedLanguages(k);
-                      dispatch({
-                        type: "audience_lang",
-                        payload: k,
-                      });
-                    }}
-                    className=" "
-                    size={23}
-                  />
-                </li>
-              );
-            })
-          : null}
-        {selectedInfLanguages?.length
-          ? selectedInfLanguages.map((lang) => {
-              return (
-                <li className="single-filter ">
-                  <b> Language Inf:</b> {lang.name}
-                  <GrFormClose
-                    onClick={() => {
-                      const k = selectedInfLanguages.filter(
-                        (c) => lang.code !== c.code,
-                      );
+                        dispatch({
+                          type: "relevance",
+                          payload: {
+                            value: rString,
+                          },
+                        });
+                      }}
+                      size={23}
+                    />
+                  </li>
+                );
+              })
+            : null}
+          {selectedLanguages?.length
+            ? selectedLanguages.map((lang) => {
+                return (
+                  <li className="single-filter ">
+                    <b> Language Aud:</b> {lang.name}{" "}
+                    {`>  ${(lang.weight * 100).toFixed(0)}%`}{" "}
+                    <IoCloseOutline
+                      onClick={() => {
+                        const k = selectedLanguages.filter(
+                          (c) => lang.code !== c.code,
+                        );
+                        setSelectedLanguages(k);
+                        dispatch({
+                          type: "audience_lang",
+                          payload: k,
+                        });
+                      }}
+                      className=" "
+                      size={23}
+                    />
+                  </li>
+                );
+              })
+            : null}
+          {selectedInfLanguages?.code ? (
+            <li className="single-filter ">
+              <b> Language Inf:</b> {selectedInfLanguages.name}
+              <IoCloseOutline
+                onClick={() => {
+                  setSelectedInfLanguages({});
 
-                      setSelectedInfLanguages(k);
-                      const langCodes = k.map((item) => ({
-                        code: item.code,
-                      }));
-                      dispatch({
-                        type: "lang",
-                        payload: langCodes,
-                      });
-                    }}
-                    className=" "
-                    size={23}
-                  />
-                </li>
-              );
-            })
-          : null}
-        {lastPost ? (
-          <li className="single-filter ">
-            <b> Last Post:</b> {lastPost / 30}{" "}
-            {lastPost / 30 > 1 ? "Months" : "Month"}
-            <GrFormClose
-              onClick={() => {
-                setlastPost("");
-                dispatch({
-                  type: "audience_relevance",
-                  payload: null,
-                });
-              }}
-              className=" "
-              size={23}
-            />
-          </li>
-        ) : null}
-        {selectedGrowth?.interval ? (
-          <li className="single-filter">
-            <b> Followers Growth:</b> {selectedGrowth.name}
-            <GrFormClose
-              onClick={() => {
-                setSelectedGrowth({});
-                dispatch({
-                  type: "followers_growth",
-                  payload: {},
-                });
-              }}
-              className=" "
-              size={23}
-            />
-          </li>
-        ) : null}
-        {isVerified ? (
-          <li className="single-filter">
-            Only Verified
-            <GrFormClose
-              onClick={() => {
-                setSelectedGrowth({});
-                dispatch({
-                  type: "followers_growth",
-                  payload: {},
-                });
-              }}
-              className=" "
-              size={23}
-            />
-          </li>
-        ) : null}
-        {hasAudData ? (
-          <li className="single-filter">
-            Has Audience
-            <GrFormClose
-              onClick={() => {
-                setHasAudData(false);
-                dispatch({
-                  type: "has_audience_data",
-                  payload: false,
-                });
-              }}
-              className=" "
-              size={23}
-            />
-          </li>
-        ) : null}
-        {selectedAudAges?.length ? (
-          <li className="single-filter">
-            <b> Age Aud:</b> {selectedAudAges[0].code.split("-")[0]} -{" "}
-            {selectedAudAges[1]
-              ? selectedAudAges[selectedAudAges.length - 1].code.split("-")[1]
+                  dispatch({
+                    type: "lang",
+                    payload: {},
+                  });
+                }}
+                className=" "
+                size={23}
+              />
+            </li>
+          ) : null}
+          {lastPost ? (
+            <li className="single-filter ">
+              <b> Last Post:</b> {lastPost / 30}{" "}
+              {lastPost / 30 > 1 ? "Months" : "Month"}
+              <IoCloseOutline
+                onClick={() => {
+                  setlastPost("");
+                  dispatch({
+                    type: "audience_relevance",
+                    payload: null,
+                  });
+                }}
+                className=" "
+                size={23}
+              />
+            </li>
+          ) : null}
+          {selectedGrowth?.interval ? (
+            <li className="single-filter">
+              <b> Followers Growth:</b> {selectedGrowth.name}{" "}
+              {`>  ${(selectedGrowth.value * 100).toFixed(0)}%`}{" "}
+              <IoCloseOutline
+                onClick={() => {
+                  setSelectedGrowth({});
+                  dispatch({
+                    type: "followers_growth",
+                    payload: {},
+                  });
+                }}
+                className=" "
+                size={23}
+              />
+            </li>
+          ) : null}
+          {isVerified ? (
+            <li className="single-filter">
+              Only Verified
+              <IoCloseOutline
+                onClick={() => {
+                  setSelectedGrowth({});
+                  dispatch({
+                    type: "followers_growth",
+                    payload: {},
+                  });
+                }}
+                className=" "
+                size={23}
+              />
+            </li>
+          ) : null}
+          {hasAudData ? (
+            <li className="single-filter">
+              Has Audience
+              <IoCloseOutline
+                onClick={() => {
+                  setHasAudData(false);
+                  dispatch({
+                    type: "has_audience_data",
+                    payload: false,
+                  });
+                }}
+                className=" "
+                size={23}
+              />
+            </li>
+          ) : null}
+          {selectedAudAges?.length ? (
+            <li className="single-filter">
+              <b> Age Aud:</b> {selectedAudAges[0].code.split("-")[0]} -{" "}
+              {selectedAudAges[1]
                 ? selectedAudAges[selectedAudAges.length - 1].code.split("-")[1]
-                : "y.o"
-              : selectedAudAges[0].code.split("-")[1]}{" "}
-            {`>  ${(selectedAudAges[0]?.weight * 100).toFixed(0)}%`}
-            <GrFormClose
-              onClick={() => {
-                setSelectedAudAges([]);
-                dispatch({
-                  type: "audience_age",
-                  payload: [],
-                });
-              }}
-              className=" "
-              size={23}
-            />
-          </li>
-        ) : null}
-        {ageInflu.left_number || ageInflu.right_number ? (
-          <li className="single-filter ">
-            <b> Inf Age:</b> {ageInflu?.left_number?.toFixed(0)}{" "}
-            {ageInflu?.right_number ? "-" : "+"}
-            {ageInflu?.right_number?.toFixed(0)}
-            <GrFormClose
-              onClick={() => {
-                setAgeInflu({
-                  left_number: null,
-                  right_number: null,
-                });
-                dispatch({
-                  type: "age",
-                  payload: {
+                  ? selectedAudAges[selectedAudAges.length - 1].code.split(
+                      "-",
+                    )[1]
+                  : "y.o"
+                : selectedAudAges[0].code.split("-")[1]}{" "}
+              {`>  ${(selectedAudAges[0]?.weight * 100).toFixed(0)}%`}
+              <IoCloseOutline
+                onClick={() => {
+                  setSelectedAudAges([]);
+                  dispatch({
+                    type: "audience_age",
+                    payload: [],
+                  });
+                }}
+                className=" "
+                size={23}
+              />
+            </li>
+          ) : null}
+          {ageInflu.left_number || ageInflu.right_number ? (
+            <li className="single-filter ">
+              <b> Inf Age:</b> {ageInflu?.left_number?.toFixed(0)}{" "}
+              {ageInflu?.right_number ? "-" : "+"}
+              {ageInflu?.right_number?.toFixed(0)}
+              <IoCloseOutline
+                onClick={() => {
+                  setAgeInflu({
                     left_number: null,
                     right_number: null,
-                  },
+                  });
+                  dispatch({
+                    type: "age",
+                    payload: {
+                      left_number: null,
+                      right_number: null,
+                    },
+                  });
+                }}
+                className=" "
+                size={23}
+              />
+            </li>
+          ) : null}
+          <li className="clear-all">
+            Clear All
+            <IoCloseOutline
+              onClick={() => {
+                dispatch({
+                  type: "reset",
+                  payload: initialPayload,
                 });
+                clearAll();
               }}
-              className=" "
+              className="cursor-pointer ms-1"
               size={23}
+              color="white"
             />
           </li>
-        ) : null}
-      </ul>
+        </ul>
+      ) : null}
 
       <DashboardList
         handlePageNumber={handlePageNumber}

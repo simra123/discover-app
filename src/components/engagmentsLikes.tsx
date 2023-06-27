@@ -3,7 +3,9 @@ import * as am4core from "@amcharts/amcharts4/core";
 import * as am4charts from "@amcharts/amcharts4/charts";
 import EngagementsLikerModal from "./engagmentsLikesModal";
 import moment from "moment";
-
+import { BsFillHeartFill } from "react-icons/bs";
+import { FaComment } from "react-icons/fa";
+import { FormatNumber } from ".";
 interface ModifiedTypes {
   likes: number;
   comments: number;
@@ -31,7 +33,7 @@ const StepCountChart: React.FC = ({ data }: any) => {
       }),
     );
     setModifiedData(statArr);
-    chart.data = statArr;
+    chart.data = statArr.reverse();
 
     chart.zoomOutButton.disabled = false;
     chart.numberFormatter.numberFormat = "#,##a";
@@ -40,7 +42,34 @@ const StepCountChart: React.FC = ({ data }: any) => {
     categoryAxis.renderer.grid.template.strokeOpacity = 0;
     categoryAxis.renderer.minGridDistance = 0;
     categoryAxis.renderer.labels.template.disabled = true;
+    let axisTooltip: any = categoryAxis.tooltip;
+    axisTooltip.background.fill = am4core.color("#fff", 0.8);
+    axisTooltip.dy = -180;
+    axisTooltip.background.cornerRadius = 4;
 
+    axisTooltip.background.strokeWidth = 0;
+    categoryAxis.tooltip.label.adapter.add("html", function (text, target) {
+      console.log(target.tooltipDataItem, target);
+      //add the image to the tooltip
+      let dataItem = target.tooltipDataItem;
+
+      if (dataItem) {
+        return `<small  class="text-dark d-flex">&#10084; ${FormatNumber(
+          dataItem?.dataContext?.likes,
+        )} &#x1F4AC ${FormatNumber(
+          dataItem?.dataContext?.comments,
+        )}   <br>  ${moment(dataItem.dataContext?.created).format(
+          "MMM DD, YYYY",
+        )}  </small> `;
+      }
+      return text;
+    });
+    categoryAxis.renderer.line.strokeWidth = 0;
+    categoryAxis.renderer.line.strokeOpacity = 1;
+
+    //give category axis a right padding as the column series will be aligned to the right
+
+    categoryAxis.renderer.line.stroke = am4core.color("#e5e5e5");
     let valueAxis = chart.yAxes.push(new am4charts.ValueAxis());
     // valueAxis.renderer.inside = true;
     valueAxis.renderer.labels.template.fillOpacity = 0.5;
@@ -66,18 +95,6 @@ const StepCountChart: React.FC = ({ data }: any) => {
     series.dataFields.valueY = "likes";
     series.dataFields.categoryX = "xAxis";
     series.tooltipText = "{valuex.value}";
-    // series.tooltip.pointerOrientation = "vertical";
-    // series.tooltip.hiddenState.properties.opacity = 1;
-    // series.tooltip.hiddenState.properties.visible = true;
-    // series.tooltip.adapter.add("x", function (x, target) {
-    //   return (
-    //     am4core.utils.spritePointToSvg(
-    //       { x: chart.plotContainer.pixelX, y: 0 },
-    //       chart.plotContainer,
-    //     ).x +
-    //     chart.plotContainer.pixelWidth / 2
-    //   );
-    // });
 
     let columnTemplate = series.columns.template;
     columnTemplate.width = 20;

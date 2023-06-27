@@ -23,11 +23,11 @@ const Engagements: React.FC<DataTypes> = ({ data, picture }) => {
     x.x = am4core.percent(-15);
     x.y = am4core.percent(-20);
 
-    let categoryAxis = x.xAxes.push(new am4charts.CategoryAxis());
+    let categoryAxis: any = x.xAxes.push(new am4charts.CategoryAxis());
     categoryAxis.dataFields.category = "total";
     categoryAxis.renderer.grid.template.disabled = true;
     categoryAxis.renderer.labels.template.disabled = true;
-    let axisTooltip = categoryAxis.tooltip;
+    let axisTooltip: any = categoryAxis.tooltip;
     axisTooltip.background.fill = am4core.color("#fff", 0.8);
     axisTooltip.dy = -140;
     axisTooltip.background.cornerRadius = 100;

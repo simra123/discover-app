@@ -307,7 +307,10 @@ const UserReports = (): JSX.Element => {
                     src={userData?.user_profile?.picture}
                     alt=""
                   />
-                  <span className="verified"></span>
+
+                  {userData?.user_profile?.is_verified ? (
+                    <span className="verified"></span>
+                  ) : null}
                 </div>
               </Col>
               <Col md="6" className=" mt-3">
@@ -342,7 +345,7 @@ const UserReports = (): JSX.Element => {
                 </Input>
               </Col>
               <p className="date">
-                Updated: 1{" "}
+                Updated:{" "}
                 {moment(userData?.report_info?.profile_updated).format(
                   "DD MMM YYYY",
                 )}
@@ -388,7 +391,7 @@ const UserReports = (): JSX.Element => {
               </Row>
             </Col>
             <Col md="4">
-              <Card className="avg-cards" style={{ height: "267px" }}>
+              <Card className="avg-cards" style={{ height: "256px" }}>
                 <h2 className="d-flex">
                   {(userData?.user_profile?.engagement_rate * 100).toFixed(2)}%
                 </h2>
@@ -435,7 +438,7 @@ const UserReports = (): JSX.Element => {
               />
             </Col>
           </Row>
-          <Card className="user_card ">
+          <Card className="user_card mt-1 mb-4 ">
             <Row>
               <Col md="9">
                 <h3>SCORE</h3>
@@ -592,7 +595,12 @@ const UserReports = (): JSX.Element => {
             </Col>
             {userData?.user_profile?.relevant_tags?.length && (
               <Col md="8">
-                <Card className="avg-cards">
+                <Card
+                  className="avg-cards"
+                  style={{
+                    height: "416px",
+                  }}
+                >
                   <h5>Age and gender split</h5>
                   <AgeGenderColumns
                     data={
@@ -639,9 +647,8 @@ const UserReports = (): JSX.Element => {
                 className=" avg-cards  "
                 style={{
                   display: "flex",
-                  margin: "auto",
                   alignItems: "center",
-                  height: "280px",
+                  height: "272px",
                   justifyContent: "center",
                 }}
               >

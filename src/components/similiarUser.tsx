@@ -56,7 +56,7 @@ const SimilarUsers: React.FC<UserProps> = ({ data }) => {
         );
       })}
       <p
-        style={{ cursor: "pointer", margin: "5px 0px", padding: 0 }}
+        style={{ cursor: "pointer", margin: "4px 0px", padding: 0 }}
         onClick={() => setShowModal(true)}
       >
         view more
