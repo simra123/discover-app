@@ -8,6 +8,6 @@ export const AuthFunction = (data: any) => {
       window.location.reload(false);
     }, 1000);
   } else {
-    ToastError(data?.response! ? data?.response!?.data?.error : data?.message!);
+    // ToastError(data?.response! ? data?.response!?.data?.error : data?.message!);
   }
 };

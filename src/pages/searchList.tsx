@@ -39,6 +39,7 @@ import { AiOutlinePlus, AiOutlineMinus } from "react-icons/ai";
 import { AiFillCloseCircle } from "react-icons/ai";
 import { debounce } from "lodash";
 import { IoCloseOutline } from "react-icons/io5";
+import { dashboard_data } from "../utils";
 const TikTokList = (): JSX.Element => {
   const [showDropdown, setShowDropdown] = useState<number | null>(null);
 
@@ -837,9 +838,13 @@ const TikTokList = (): JSX.Element => {
     );
   }, [payloadState]);
   useEffect(() => {
-    // const cancelToken = axios.CancelToken.source();
+ 
+    setListData(dashboard_data?.data);
 
-    getData();
+    setTotaPages(dashboard_data.totalPages);
+    setTotalUsers(dashboard_data.totalRecords);
+    setRecordsPerP(dashboard_data.recordsPerPage);
+    console.log(dashboard_data)
   }, [payloadState]);
   useEffect(() => {
     const closeFilterCard = (e: any) => {

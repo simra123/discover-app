@@ -31,8 +31,8 @@ const LoginPage = ({ setUser }: any) => {
     },
   });
   const initialValues = {
-    email: "",
-    password: "",
+    email: "demo@gmail.com",
+    password: "Welcome",
   };
 
   const validationSchema = Yup.object().shape({
@@ -44,33 +44,42 @@ const LoginPage = ({ setUser }: any) => {
     values: any,
     { setSubmitting }: { setSubmitting: (isSubmitting: boolean) => void },
   ): void => {
-    mutate(
-      {
-        email: values.email,
-        password: values.password,
-      },
-      {
-        onSuccess: (data) => {
-          setSubmitting(false);
-          localStorage.setItem(
-            "isUserLogged",
-            JSON.stringify(data?.data.access_token),
-          );
-          setUser(JSON.stringify(data?.data?.access_token));
-          ToastSuccess("login successfully");
-          setTimeout(() => {
-            navigate("/dashboard");
-          }, 1000);
-        },
-        onError: (data) => {
-          console.log(data);
-          ToastError(
-            data?.response! ? data?.response!?.data?.error : data?.message!,
-          );
-          setSubmitting(false);
-        },
-      },
-    );
+    localStorage.setItem(
+              "isUserLogged",
+              JSON.stringify("c-HVWTjgtCf5FEHbq2YVkL"),
+            );
+            setUser(JSON.stringify("c-HVWTjgtCf5FEHbq2YVkL"));
+            ToastSuccess("login successfully");
+            setTimeout(() => {
+              navigate("/dashboard");
+            }, 1000);
+    // mutate(
+    //   {
+    //     email: values.email,
+    //     password: values.password,
+    //   },
+    //   {
+    //     onSuccess: (data) => {
+    //       setSubmitting(false);
+    //       localStorage.setItem(
+    //         "isUserLogged",
+    //         JSON.stringify(data?.data.access_token),
+    //       );
+    //       setUser(JSON.stringify(data?.data?.access_token));
+    //       ToastSuccess("login successfully");
+    //       setTimeout(() => {
+    //         navigate("/dashboard");
+    //       }, 1000);
+    //     },
+    //     onError: (data) => {
+    //       console.log(data);
+    //       ToastError(
+    //         data?.response! ? data?.response!?.data?.error : data?.message!,
+    //       );
+    //       setSubmitting(false);
+    //     },
+    //   },
+    // );
   };
 
   return (

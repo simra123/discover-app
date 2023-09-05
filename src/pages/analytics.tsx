@@ -15,7 +15,7 @@ import { useMutation } from "@tanstack/react-query";
 import TikTokList from "./searchList";
 import * as am4core from "@amcharts/amcharts4/core";
 import * as am4charts from "@amcharts/amcharts4/charts";
-
+import profile from "../content/profile.json"
 import { FormatNumber, Engagemnets, Loader } from "../components";
 import moment from "moment";
 import { AiFillQuestionCircle } from "react-icons/ai";
@@ -94,8 +94,8 @@ const UserReports = (): JSX.Element => {
   const location = useLocation();
   const searchParams = new URLSearchParams(location.search);
   const query = searchParams.get("username");
-  const [userData, setUserData] = useState<any>({});
-  const [stateHistory, setStatHistory] = useState<any>([]);
+  const [userData, setUserData] = useState<any>(profile);
+  const [stateHistory, setStatHistory] = useState<any>(profile?.user_profile?.stat_history.slice(0, 6));
   const [followers, setFollowers] = useState<string | null | number>(null);
   const [following, setFollowing] = useState<string | null>(null);
   const [likes, setLikes] = useState<string | null>(null);
@@ -103,43 +103,37 @@ const UserReports = (): JSX.Element => {
   const [comments, setAvgComments] = useState<string | null>(null);
   const [showCard, setShowCard] = useState<boolean>(false);
 
-  useEffect(() => {
-    if (query) {
-      setShowCard(false);
-      mutate(
-        {
-          type: "tiktok",
-          user_id: query,
-        },
-        {
-          onSuccess: (data: any) => {
-            if (data.data?.data[0]) {
-              setUserData(data.data?.data[0]);
+  // useEffect(() => {
+  //   // if (query) {
+  //   //   setShowCard(false);
+  //   //   mutate(
+  //   //     {
+  //   //       type: "tiktok",
+  //   //       user_id: query,
+  //   //     },
+  //   //     {
+  //   //       onSuccess: (data: any) => {
+  //   //         if (data.data?.data[0]) {
+  //   //           setUserData(data.data?.data[0]);
 
-              if (data.data?.data[0]?.user_profile?.stat_history.length > 5) {
-                const kk =
-                  data.data?.data[0]?.user_profile?.stat_history?.slice(
-                    Math.max(
-                      data.data?.data[0]?.user_profile?.stat_history?.length -
-                        5,
-                      1,
-                    ),
-                  );
-                setStatHistory(kk);
-              } else {
-                setStatHistory(data.data?.data[0]?.user_profile?.stat_history);
-              }
-            } else {
-              setUserData({});
-            }
-          },
-          onError: (data: any) => {
-            AuthFunction(data);
-          },
-        },
-      );
-    }
-  }, [query]);
+  //   //           if (data.data?.data[0]?.user_profile?.stat_history.length > 5) {
+  //   //           
+  //   //           } else {
+  //   //             setStatHistory(data.data?.data[0]?.user_profile?.stat_history);
+  //   //           }
+  //   //         } else {
+  //   //           setUserData({});
+  //   //         }
+  //   //       },
+  //   //       onError: (data: any) => {
+  //   //         AuthFunction(data);
+  //   //       },
+  //   //     },
+  //   //   );
+  //   // }
+  // }, []);
+
+
 
   useEffect(() => {
     const graph = am4core.create("line-followers", am4charts.XYChart);
