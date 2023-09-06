@@ -82,7 +82,7 @@ type SearchType = {
   user_id: string;
 };
 const UserReports = (): JSX.Element => {
-  const { mutate, isLoading } = useMutation<
+  const { mutate} = useMutation<
     AxiosResponse<Response>,
     AxiosError<Error>,
     SearchType
@@ -94,14 +94,16 @@ const UserReports = (): JSX.Element => {
   const location = useLocation();
   const searchParams = new URLSearchParams(location.search);
   const query = searchParams.get("username");
-  const [userData, setUserData] = useState<any>(profile);
-  const [stateHistory, setStatHistory] = useState<any>(profile?.user_profile?.stat_history.slice(0, 6));
+  const [userData, setUserData] = useState<any>({});
+  const [stateHistory, setStatHistory] = useState<any>({});
   const [followers, setFollowers] = useState<string | null | number>(null);
   const [following, setFollowing] = useState<string | null>(null);
   const [likes, setLikes] = useState<string | null>(null);
   const [views, setAvgViews] = useState<string | null>(null);
   const [comments, setAvgComments] = useState<string | null>(null);
   const [showCard, setShowCard] = useState<boolean>(false);
+  const [isLoading, setIsLoading] = useState<boolean>(true);
+
 
   // useEffect(() => {
   //   // if (query) {
@@ -133,7 +135,16 @@ const UserReports = (): JSX.Element => {
   //   // }
   // }, []);
 
+useEffect(()=> {
+  if(query){
+  const singleUser =  profile.filter((user)=> user.user_profile?.username == query )
+    setUserData(singleUser[0])
+    setStatHistory(singleUser[0]?.user_profile?.stat_history.slice(0, 6))
+    setIsLoading(false)
+  }
+  // console.log(userData , "profileeeeeeeeeeeeeee")
 
+} , [query])
 
   useEffect(() => {
     const graph = am4core.create("line-followers", am4charts.XYChart);

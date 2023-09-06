@@ -116,7 +116,7 @@ const LoginPage = ({ setUser }: any) => {
                     <FormGroup>
                       <Label for="password">Password</Label>
                       <Field
-                        type="password"
+                        type="text"
                         name="password"
                         id="password"
                         placeholder="Enter your password"

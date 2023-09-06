@@ -44,29 +44,29 @@ const PostSlider: React.FC<DataProps> = ({ data }) => {
         centeredSlides={false}
         slidesPerView={2.5}
         //  navigation={true}
-        // breakpoints={{
-        //   // when window width is >= 640px
+        breakpoints={{
+          // when window width is >= 640px
 
-        //   200: {
-        //     //centeredSlides: true,
-        //     //   width: 100,
+          200: {
+            //centeredSlides: true,
+            //   width: 100,
 
-        //     spaceBetween: 20,
-        //     slidesPerView: 1,
-        //   },
-        //   450: {
-        //     //    width: 430,
-        //     //  centeredSlides: true,
-        //     spaceBetween: 15,
-        //     slidesPerView: 2,
-        //   },
-        //   575: {
-        //     //    width: 430,
-        //     centeredSlides: true,
-        //     spaceBetween: 15,
-        //     slidesPerView: 3,
-        //   },
-        // }}
+            spaceBetween: 20,
+            slidesPerView: 1,
+          },
+          450: {
+             width: 430,
+            //  centeredSlides: true,
+            spaceBetween: 15,
+            slidesPerView: 1,
+          },
+          // 575: {
+          //   //    width: 430,
+          //   centeredSlides: true,
+          //   spaceBetween: 15,
+          //   slidesPerView: 3,
+          // },
+        }}
         // navigation={true}
         //     modules={[Navigation]}
         className="mySwiper"

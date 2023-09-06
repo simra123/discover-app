@@ -37,7 +37,7 @@ const Dashboard: React.FC = () => {
         fluid
         className="dashboard pt-5">
         <Row>
-          <Col lg="1">
+          <Col className="d-none d-md-block" lg="1">
             <div className="sidebar ">
               <Nav vertical>
                 <NavbarBrand
