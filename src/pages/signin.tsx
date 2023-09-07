@@ -79,7 +79,7 @@ const LoginPage = () => {
       <Container>
         {" "}
         <div className="login">
-          <img className="mb-4" width={230} height={"auto"} src={Logo} />
+          <img className="mb-4" width={220} height={"auto"} src={Logo} />
           <Card>
             <CardBody>
               <h4>Register new Account</h4>
