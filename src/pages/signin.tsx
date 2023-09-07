@@ -1,6 +1,6 @@
 import { Container, Card, FormGroup, Label, Input, CardBody } from "reactstrap";
 import { Link, useNavigate } from "react-router-dom";
-import Logo from "../assets/images/logo.webp";
+import Logo from "../assets/images/logo.svg";
 import { useMutation } from "@tanstack/react-query";
 import HttpHandler from "../http/CoreHttpHandler";
 import { LoadingButton, ToastError, ToastSuccess } from "../components";
@@ -79,7 +79,7 @@ const LoginPage = () => {
       <Container>
         {" "}
         <div className="login">
-          <img className="mb-4" width={200} height={"auto"} src={Logo} />
+          <img className="mb-4" width={230} height={"auto"} src={Logo} />
           <Card>
             <CardBody>
               <h4>Register new Account</h4>
